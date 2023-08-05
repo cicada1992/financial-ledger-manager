@@ -11,8 +11,9 @@ import {
   Spacer,
   useDisclosure,
 } from '@nextui-org/react';
-import { container } from './page.css';
 import React from 'react';
+
+import { container } from './page.css';
 
 const Home: React.FC = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();

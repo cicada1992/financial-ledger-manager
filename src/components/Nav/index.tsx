@@ -1,7 +1,5 @@
 'use client';
 
-import Image from 'next/image';
-import React from 'react';
 import {
   Button,
   Navbar,
@@ -13,9 +11,12 @@ import {
   NavbarMenuToggle,
   Link as LinkUI,
 } from '@nextui-org/react';
-import { usePathname } from 'next/navigation';
-import { MENU_ITEMS } from './constants';
+import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import React from 'react';
+
+import { MENU_ITEMS } from './constants';
 
 const Nav: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);

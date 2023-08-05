@@ -1,5 +1,6 @@
-import { container } from './page.css';
 import React from 'react';
+
+import { container } from './page.css';
 
 const Home: React.FC = () => {
   return (
