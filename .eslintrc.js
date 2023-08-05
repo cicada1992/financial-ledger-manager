@@ -14,7 +14,7 @@ module.exports = {
     },
   },
   extends: ['next/core-web-vitals', 'plugin:import/recommended', 'plugin:import/typescript'],
-  plugins: ['import'],
+  plugins: ['import', 'unused-imports'],
   ignorePatterns: ['.eslintrc.js'],
   rules: {
     'import/order': [
@@ -29,5 +29,6 @@ module.exports = {
         warnOnUnassignedImports: true,
       },
     ],
+    'unused-imports/no-unused-imports': 'error',
   },
 };
