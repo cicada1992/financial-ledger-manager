@@ -13,22 +13,16 @@ import {
   NavbarMenuToggle,
   Link as LinkUI,
 } from '@nextui-org/react';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { MENU_ITEMS } from './constants';
 import Link from 'next/link';
 
 const Nav: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const router = useRouter();
   const currentPathName = usePathname();
 
   return (
-    <Navbar
-      onMenuOpenChange={(value) => {
-        console.log(value);
-        setIsMenuOpen(Boolean(value));
-      }}
-    >
+    <Navbar onMenuOpenChange={(value) => setIsMenuOpen(Boolean(value))}>
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
@@ -62,9 +56,7 @@ const Nav: React.FC = () => {
         {MENU_ITEMS.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>
             <LinkUI
-              color={
-                index === 2 ? 'primary' : index === MENU_ITEMS.length - 1 ? 'danger' : 'foreground'
-              }
+              color={getIsActive(item.path) ? 'primary' : 'foreground'}
               className="w-full"
               href={item.path}
             >
