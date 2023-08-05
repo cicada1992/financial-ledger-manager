@@ -6,4 +6,5 @@ export const main = style({
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
+  padding: '10px 10px 0 10px',
 });

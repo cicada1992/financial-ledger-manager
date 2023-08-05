@@ -14,12 +14,12 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { MENU_ITEMS } from './constants';
 
 const Nav: React.FC = () => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const currentPathName = usePathname();
 
   return (
@@ -33,7 +33,6 @@ const Nav: React.FC = () => {
           <Image src="/next.svg" alt="Vercel Logo" width={100} height={24} priority />
         </NavbarBrand>
       </NavbarContent>
-
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         {MENU_ITEMS.map((item) => (
           <NavbarItem key={item.path} isActive={getIsActive(item.path)}>
