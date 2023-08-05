@@ -5,48 +5,63 @@ import {
   TableHeader,
   TableBody,
   TableRow,
-  TableCell,
   TableColumn,
-  getKeyValue,
   Switch,
-  TableBodyProps,
+  TableCell,
 } from '@nextui-org/react';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { MONTHLY_TABLE_COLUMNS } from './constants';
+import SectionWrapper from './shared/SectionWrapper';
 
-interface IProps {
-  rows: TableBodyProps<{
-    key: string;
-    name: string;
-    price: number;
-    done: boolean;
-  }>['items'];
+export interface IRow {
+  id: string;
+  name: string;
+  value: number;
+  done: boolean;
 }
 
-const MonthlyTable: React.FC<IProps> = ({ rows }) => {
+interface IProps {
+  title: React.ReactNode;
+  rows: Array<IRow>;
+}
+
+const MonthlyTable: React.FC<IProps> = ({ title, rows }) => {
+  const renderCell = useCallback((row: IRow, columnKey: React.Key) => {
+    switch (columnKey) {
+      case 'name':
+        return row.name;
+      case 'value':
+        return row.value.toLocaleString();
+      case 'done':
+        return <Switch isSelected={row.done} />;
+      default:
+        return '-';
+    }
+  }, []);
+
   return (
-    <NextUITable aria-label="Example static collection table" id="NextUITable">
-      <TableHeader columns={MONTHLY_TABLE_COLUMNS}>
-        {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-      </TableHeader>
-      <TableBody items={rows}>
-        {(item) => (
-          <TableRow key={item.key}>
-            {(columnKey) => {
-              const value = getKeyValue(item, columnKey);
-              if (typeof value === 'boolean') {
-                return <TableCell>{<Switch isSelected={value} />}</TableCell>;
-              }
-              if (typeof value === 'number') {
-                return <TableCell>{`${value.toLocaleString()}`}</TableCell>;
-              }
-              return <TableCell>{value}</TableCell>;
-            }}
-          </TableRow>
-        )}
-      </TableBody>
-    </NextUITable>
+    <SectionWrapper title={title}>
+      <NextUITable aria-label="Example static collection table" id="NextUITable">
+        <TableHeader columns={MONTHLY_TABLE_COLUMNS}>
+          {(column) => {
+            const width = column.uid === 'name' ? '65%' : '100%';
+            return (
+              <TableColumn key={column.uid} width={width} minWidth={width} maxWidth={width}>
+                {column.name}
+              </TableColumn>
+            );
+          }}
+        </TableHeader>
+        <TableBody items={rows}>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+            </TableRow>
+          )}
+        </TableBody>
+      </NextUITable>
+    </SectionWrapper>
   );
 };
 

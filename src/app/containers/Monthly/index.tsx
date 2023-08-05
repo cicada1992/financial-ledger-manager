@@ -1,69 +1,40 @@
 'use client';
-import {
-  Card,
-  CardBody,
-  Chip,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Spacer,
-} from '@nextui-org/react';
+import { Spacer } from '@nextui-org/react';
 import React from 'react';
 
 import { INCOME_ROWS, SPEND_ROWS } from './constants';
+import MonthlySummary from './MonthlySummary';
 import MonthlyTable from './MonthlyTable';
 import PageContainer from '../../components/PageContainer';
 
 const MonthlyPage: React.FC = () => {
-  const today = new Date();
-  const thisMonth = today.getMonth() + 1;
+  const period = getPeriod();
+
   return (
     <PageContainer>
-      <MonthlyTable rows={INCOME_ROWS} />
+      <MonthlyTable title={<>수입 {period}</>} rows={INCOME_ROWS} />
       <Spacer y={4} />
-      <MonthlyTable rows={SPEND_ROWS} />
+      <MonthlyTable title={<>지출 {period}</>} rows={SPEND_ROWS} />
       <Spacer y={4} />
-      <Card style={{ width: '100%' }}>
-        <CardBody>
-          <Popover placement="right">
-            <PopoverTrigger>
-              <Chip color="primary">{getExpected()}</Chip>
-            </PopoverTrigger>
-            <PopoverContent>
-              <div className="px-1 py-2">
-                <div className="text-small font-bold">{thisMonth}월 예상 잔액</div>
-                <div className="text-tiny">이번달 총수입에서 총 지출을 뺀 금액이에요.</div>
-              </div>
-            </PopoverContent>
-          </Popover>
-          <Spacer y={2} />
-          <Popover placement="right">
-            <PopoverTrigger>
-              <Chip color="danger">{getRemainedSpend()}</Chip>
-            </PopoverTrigger>
-            <PopoverContent>
-              <div className="px-1 py-2">
-                <div className="text-small font-bold">{thisMonth}월 지출 잔액</div>
-                <div className="text-tiny">
-                  이번달 지출예정액에서 아직 처리되지 않은 것들의 합산을 의미해요.
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
-        </CardBody>
-      </Card>
+      <MonthlySummary period={period} />
     </PageContainer>
   );
 
-  function getExpected(): string {
-    const totalIncome = INCOME_ROWS.reduce((acc, cur) => acc + cur.price, 0);
-    const totalSpend = SPEND_ROWS.reduce((acc, cur) => acc + cur.price, 0);
-    return `￦${(totalIncome - totalSpend).toLocaleString()}`;
-  }
+  function getPeriod() {
+    const now = new Date();
+    const utc = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+    // 한국 시간은 UTC보다 9시간 빠름 (9시간의 밀리세컨드 표현)
+    const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+    const korNow = new Date(utc + KR_TIME_DIFF);
+    const month = korNow.getMonth() + 1;
+    const day = korNow.getDay() - 1;
+    const isBiggerThan25Day = day > 25;
 
-  function getRemainedSpend(): string {
-    const remained = SPEND_ROWS.reduce((acc, cur) => (cur.done ? acc : acc + cur.price), 0);
-    return `￦${remained.toLocaleString()}`;
+    return (
+      <span style={{ color: '#a1a1aa', fontWeight: 'normal', fontSize: 11 }}>
+        ({isBiggerThan25Day ? month - 1 : month}월 25일 ~ {month + 1}월 24일)
+      </span>
+    );
   }
 };
 export default MonthlyPage;

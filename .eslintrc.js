@@ -15,7 +15,7 @@ module.exports = {
   },
   extends: ['next/core-web-vitals', 'plugin:import/recommended', 'plugin:import/typescript'],
   plugins: ['import', 'unused-imports'],
-  ignorePatterns: ['.eslintrc.js'],
+  ignorePatterns: ['.eslintrc.js', 'tailwind.config.js'],
   rules: {
     'import/order': [
       2,
