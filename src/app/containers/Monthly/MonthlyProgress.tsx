@@ -5,6 +5,7 @@ import React, { useCallback } from 'react';
 
 import { DateUtils } from '@/app/utils/dateUtils';
 
+import { progress } from './MonthlyProgress.css';
 import SectionWrapper from './shared/SectionWrapper';
 
 interface IProps {
@@ -19,7 +20,7 @@ const MonthlyProgress: React.FC<IProps> = ({ title }) => {
     <SectionWrapper title={title}>
       <Popover placement="bottom-start">
         <PopoverTrigger>
-          <Progress value={getValue().ratio} className="max-w-md" />
+          <Progress value={getValue().ratio} className={`max-w-md ${progress}`} />
         </PopoverTrigger>
         <PopoverContent>
           <div className="px-1 py-2">
