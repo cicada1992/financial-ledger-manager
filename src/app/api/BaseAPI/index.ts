@@ -2,20 +2,19 @@ import { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
 import WithMiddleware from './middleware';
-import { IAPIMiddleware } from './types';
 
 class EdgeAPI extends WithMiddleware {
   private readonly prefix: string;
 
-  constructor(prefix: string, middleware: IAPIMiddleware = {}) {
+  constructor(prefix: string) {
     const config: AxiosRequestConfig = {
       // withCredentials: true,
       paramsSerializer: (params) => qs.stringify(params),
       timeout: 15000,
       timeoutErrorMessage: '[타임아웃] 요청 시간이 지났습니다.',
-      baseURL: 'http://localhost:8912', // 'http://3.35.9.92:8912'
+      baseURL: 'http://3.35.9.92:8912',
     };
-    super(config, middleware);
+    super(config);
 
     this.prefix = prefix;
   }
