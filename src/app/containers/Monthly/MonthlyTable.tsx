@@ -8,7 +8,6 @@ import {
   TableColumn,
   Switch,
   TableCell,
-  Button,
 } from '@nextui-org/react';
 import React, { useCallback } from 'react';
 
@@ -48,13 +47,13 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows }) => {
       title={
         <div className="flex justify-between items-end">
           <div>{title}</div>
-          <Button
+          {/* <Button
             radius="full"
             className="bg-gradient-to-tr from-blue-500 to-green-500 text-white shadow-lg"
             size="sm"
           >
             Edit
-          </Button>
+          </Button> */}
         </div>
       }
     >
