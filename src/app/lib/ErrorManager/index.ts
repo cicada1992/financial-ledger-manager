@@ -45,7 +45,6 @@ class ErrorManager {
    * @deprecated Axios middleware 밖에선 사용하지 않습니다.
    */
   interceptAxiosError(error: AxiosError): Promise<void> {
-    console.log({ error });
     return Promise.reject(new APIError(error));
   }
 
