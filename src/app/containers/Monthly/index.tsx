@@ -38,3 +38,6 @@ const MonthlyPage: React.FC = () => {
   }
 };
 export default MonthlyPage;
+function useSWR(arg0: string, fetcher: any): { data: any } {
+  throw new Error('Function not implemented.');
+}
