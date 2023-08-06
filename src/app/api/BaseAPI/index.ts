@@ -1,3 +1,4 @@
+'use client';
 import { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
@@ -11,7 +12,7 @@ class EdgeAPI extends WithMiddleware {
       paramsSerializer: (params) => qs.stringify(params),
       timeout: 15000,
       timeoutErrorMessage: '[타임아웃] 요청 시간이 지났습니다.',
-      baseURL: 'http://localhost:8912', // 'http://3.35.9.92:8912',
+      baseURL: 'http://3.35.9.92:8912',
     };
     super(config);
 
