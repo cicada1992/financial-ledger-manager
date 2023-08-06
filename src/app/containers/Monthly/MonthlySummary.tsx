@@ -10,8 +10,10 @@ import {
   PopoverContent,
 } from '@nextui-org/react';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 
-import { INCOME_ROWS, SPEND_ROWS } from './constants';
+import { Selectors } from '@/app/recoils/selectors';
+
 import SectionWrapper from './shared/SectionWrapper';
 
 interface IProps {
@@ -19,6 +21,8 @@ interface IProps {
 }
 
 const MonthlySummary: React.FC<IProps> = ({ period }) => {
+  const data = useRecoilValue(Selectors.monthlyDataQuery);
+
   return (
     <SectionWrapper title={<>Summary {period}</>}>
       <Card style={{ width: '100%' }}>
@@ -54,13 +58,13 @@ const MonthlySummary: React.FC<IProps> = ({ period }) => {
   );
 
   function getExpected(): string {
-    const totalIncome = INCOME_ROWS.reduce((acc, cur) => acc + cur.value, 0);
-    const totalSpend = SPEND_ROWS.reduce((acc, cur) => acc + cur.value, 0);
+    const totalIncome = data.income.reduce((acc, cur) => acc + cur.value, 0);
+    const totalSpend = data.spend.reduce((acc, cur) => acc + cur.value, 0);
     return `￦${(totalIncome - totalSpend).toLocaleString()}`;
   }
 
   function getRemainedSpend(): string {
-    const remained = SPEND_ROWS.reduce((acc, cur) => (cur.done ? acc : acc + cur.value), 0);
+    const remained = data.spend.reduce((acc, cur) => (cur.done ? acc : acc + cur.value), 0);
     return `￦${remained.toLocaleString()}`;
   }
 };

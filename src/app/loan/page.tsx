@@ -15,7 +15,7 @@ import React from 'react';
 
 import { container } from './page.css';
 
-const Home: React.FC = () => {
+const Loan: React.FC = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
@@ -66,4 +66,4 @@ const Home: React.FC = () => {
     </>
   );
 };
-export default Home;
+export default Loan;
