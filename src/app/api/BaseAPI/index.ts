@@ -8,7 +8,6 @@ class EdgeAPI extends WithMiddleware {
 
   constructor(prefix: string) {
     const config: AxiosRequestConfig = {
-      withCredentials: true,
       paramsSerializer: (params) => qs.stringify(params),
       timeout: 15000,
       timeoutErrorMessage: '[타임아웃] 요청 시간이 지났습니다.',
