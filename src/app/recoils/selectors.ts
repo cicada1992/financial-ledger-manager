@@ -1,13 +1,13 @@
 import { selector } from 'recoil';
 
-import MonthlyAPI from '../api/MonthlyAPI';
+import { IGetMonthlyDataResponse } from '../api/MonthlyAPI/types';
 
 export namespace Selectors {
   export const monthlyDataQuery = selector({
     key: 'monthlyDataQuery',
     get: async () => {
-      const response = await MonthlyAPI.getData();
-      return response;
+      // const response = await MonthlyAPI.getData();
+      return { spend: [], income: [] } as IGetMonthlyDataResponse;
     },
   });
 }
