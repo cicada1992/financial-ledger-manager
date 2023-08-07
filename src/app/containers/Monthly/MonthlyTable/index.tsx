@@ -6,16 +6,23 @@ import {
   TableBody,
   TableRow,
   TableColumn,
-  Switch,
   TableCell,
+  Spacer,
+  Switch,
 } from '@nextui-org/react';
-import React, { useCallback } from 'react';
+import React, { forwardRef, useCallback, useImperativeHandle } from 'react';
 
 import { ICreateMonthlyBody, IMonthly, IUpdateMonthlyBody } from '@/app/api/MonthlyAPI/types';
 
+import MonthlyRowCreator from './RowCreator';
+import MonthlyRowRemover from './RowRemover';
 import MonthlyTableTitle from './Title';
 import { MONTHLY_TABLE_COLUMNS } from '../constants';
 import SectionWrapper from '../shared/SectionWrapper';
+
+export interface IMonthlyTableRef {
+  resetSelectedKeys(): void;
+}
 
 interface IProps {
   title: React.ReactNode;
@@ -23,13 +30,32 @@ interface IProps {
   type: 'INCOME' | 'SPEND';
   createData: (data: ICreateMonthlyBody) => void;
   updateData: (data: IUpdateMonthlyBody) => void;
+  removeData: (keys: string[]) => void;
 }
 
-const MonthlyTable: React.FC<IProps> = ({ title, rows, type, createData, updateData }) => {
+/* eslint-disable */
+const MonthlyTable = forwardRef<IMonthlyTableRef, IProps>((props, ref) => {
+  const [selectedKeys, setSelectedKeys] = React.useState<Set<string>>(new Set());
+
+  useImperativeHandle(ref, () => ({
+    resetSelectedKeys: () => selectedKeys.clear(),
+  }));
+
+  const { title, rows, type, createData, updateData, removeData } = props;
   const renderCell = useCallback((row: IMonthly, columnKey: React.Key) => {
     switch (columnKey) {
       case 'name':
-        return row.name;
+        return (
+          <div
+            style={{
+              wordBreak: 'break-all',
+              maxWidth: '100%',
+              wordWrap: 'break-word',
+            }}
+          >
+            {row.name}
+          </div>
+        );
       case 'value':
         return row.amount.toLocaleString();
       case 'done':
@@ -43,18 +69,20 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type, createData, updateD
         return '-';
     }
   }, []);
-
   return (
-    <SectionWrapper title={<MonthlyTableTitle title={title} type={type} onAdd={handleAddClick} />}>
+    <SectionWrapper title={<MonthlyTableTitle title={title} />}>
       <NextUITable
         aria-label="Example static collection table"
         id="NextUITable"
+        selectionMode="multiple"
+        color="danger"
         disabledKeys={rows.filter((row) => row.done).map((row) => row.id)}
+        onSelectionChange={(keys) => handleSelectChange(keys as Set<string>)}
       >
         <TableHeader columns={MONTHLY_TABLE_COLUMNS}>
           {(column) => {
             const width = (() => {
-              if (column.uid === 'name') return '45%';
+              if (column.uid === 'name') return '35%';
               if (column.uid === 'price') return 100;
               if (column.uid === 'done') return 80;
             })();
@@ -73,14 +101,27 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type, createData, updateD
           )}
         </TableBody>
       </NextUITable>
+      <Spacer y={2} />
+      <div className="w-full flex justify-between">
+        <MonthlyRowRemover
+          type={type}
+          onRemove={handleRemoveClick}
+          className={selectedKeys.size <= 0 ? 'invisible' : ''}
+        />
+        <MonthlyRowCreator type={type} onAdd={handleAddClick} />
+      </div>
     </SectionWrapper>
   );
+
+  function handleSelectChange(keys: Set<string>) {
+    setSelectedKeys(keys);
+  }
 
   async function handleAddClick(body: ICreateMonthlyBody) {
     createData(body);
   }
 
-  async function handleRowChange<TKey extends keyof IUpdateMonthlyBody>(
+  function handleRowChange<TKey extends keyof IUpdateMonthlyBody>(
     key: TKey,
     value: IUpdateMonthlyBody[TKey],
     row: IMonthly,
@@ -89,6 +130,10 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type, createData, updateD
     cloned[key] = value;
     updateData(cloned);
   }
-};
+
+  function handleRemoveClick() {
+    removeData(Array.from(selectedKeys));
+  }
+});
 
 export default MonthlyTable;

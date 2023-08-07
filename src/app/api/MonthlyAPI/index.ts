@@ -15,6 +15,10 @@ namespace MonthlyAPI {
   export function update(body: IUpdateMonthlyBody): Promise<IMonthly[]> {
     return api.put(`/${body.id}`, body);
   }
+
+  export function remove(id: string): Promise<IMonthly[]> {
+    return api.delete(`/${id}`);
+  }
 }
 
 export default MonthlyAPI;

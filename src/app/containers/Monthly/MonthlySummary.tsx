@@ -39,7 +39,7 @@ const MonthlySummary: React.FC<IProps> = ({ period, data }) => {
           <Spacer y={2} />
           <Popover placement="right">
             <PopoverTrigger>
-              <Chip color="danger">{getRemainedSpend()}</Chip>
+              <Chip color="default">{getRemainedSpend()}</Chip>
             </PopoverTrigger>
             <PopoverContent>
               <div className="px-1 py-2">

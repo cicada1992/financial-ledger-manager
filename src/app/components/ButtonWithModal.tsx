@@ -2,6 +2,7 @@
 
 import {
   Button,
+  ButtonProps,
   Modal,
   ModalContent,
   ModalFooter,
@@ -14,16 +15,28 @@ interface IProps {
   label: string;
   /** 헤더, 바디만 */
   children: ModalProps['children'];
+  buttonProps?: ButtonProps;
+  className?: string;
+
   onOk?: () => void;
   onCancel?: () => void;
+  onClosed?: () => void;
 }
 
-const ButtonWithModal: React.FC<IProps> = ({ label, children, onOk, onCancel }) => {
+const ButtonWithModal: React.FC<IProps> = ({
+  label,
+  children,
+  buttonProps,
+  className,
+  onOk,
+  onCancel,
+  onClosed,
+}) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   return (
     <>
-      <Button size="sm" onPress={onOpen}>
+      <Button color="default" size="sm" {...buttonProps} onPress={onOpen} className={className}>
         {label}
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} hideCloseButton placement="center">
@@ -43,11 +56,13 @@ const ButtonWithModal: React.FC<IProps> = ({ label, children, onOk, onCancel }) 
   function handleOkClick() {
     onOk?.();
     onClose();
+    onClosed?.();
   }
 
   function handleCancelClick() {
     onCancel?.();
     onClose();
+    onClosed?.();
   }
 };
 
