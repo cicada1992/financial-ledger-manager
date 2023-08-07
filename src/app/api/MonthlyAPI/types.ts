@@ -1,11 +1,15 @@
-export interface IMonthlyDataRow {
+export interface IMonthly {
   id: string;
   name: string;
-  value: number;
+  amount: number;
   done: boolean;
+  type: 'INCOME' | 'SPEND';
 }
 
-export interface IGetMonthlyDataResponse {
-  spend: Array<IMonthlyDataRow>;
-  income: Array<IMonthlyDataRow>;
+export interface ICreateMonthlyBody {
+  name: string;
+  amount: number;
+  done: boolean;
+  type: 'INCOME' | 'SPEND';
 }
+export interface IUpdateMonthlyBody extends IMonthly {}

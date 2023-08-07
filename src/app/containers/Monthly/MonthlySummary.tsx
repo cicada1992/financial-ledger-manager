@@ -11,13 +11,13 @@ import {
 } from '@nextui-org/react';
 import React from 'react';
 
-import { IGetMonthlyDataResponse } from '@/app/api/MonthlyAPI/types';
+import { IMonthly } from '@/app/api/MonthlyAPI/types';
 
 import SectionWrapper from './shared/SectionWrapper';
 
 interface IProps {
   period: React.ReactNode;
-  data: IGetMonthlyDataResponse;
+  data: IMonthly[];
 }
 
 const MonthlySummary: React.FC<IProps> = ({ period, data }) => {
@@ -56,13 +56,19 @@ const MonthlySummary: React.FC<IProps> = ({ period, data }) => {
   );
 
   function getExpected(): string {
-    const totalIncome = data.income.reduce((acc, cur) => acc + cur.value, 0);
-    const totalSpend = data.spend.reduce((acc, cur) => acc + cur.value, 0);
+    const totalIncome = data
+      .filter(({ type }) => type === 'INCOME')
+      .reduce((acc, cur) => acc + cur.amount, 0);
+    const totalSpend = data
+      .filter(({ type }) => type === 'SPEND')
+      .reduce((acc, cur) => acc + cur.amount, 0);
     return `￦${(totalIncome - totalSpend).toLocaleString()}`;
   }
 
   function getRemainedSpend(): string {
-    const remained = data.spend.reduce((acc, cur) => (cur.done ? acc : acc + cur.value), 0);
+    const remained = data
+      .filter(({ type }) => type === 'SPEND')
+      .reduce((acc, cur) => (cur.done ? acc : acc + cur.amount), 0);
     return `￦${remained.toLocaleString()}`;
   }
 };

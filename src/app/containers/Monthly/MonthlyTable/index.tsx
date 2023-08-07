@@ -11,30 +11,32 @@ import {
 } from '@nextui-org/react';
 import React, { useCallback } from 'react';
 
-import { IMonthlyDataRow } from '@/app/api/MonthlyAPI/types';
+import { ICreateMonthlyBody, IMonthly, IUpdateMonthlyBody } from '@/app/api/MonthlyAPI/types';
 
-import { MONTHLY_TABLE_COLUMNS } from './constants';
-import SectionWrapper from './shared/SectionWrapper';
+import MonthlyTableTitle from './Title';
+import { MONTHLY_TABLE_COLUMNS } from '../constants';
+import SectionWrapper from '../shared/SectionWrapper';
 
 interface IProps {
   title: React.ReactNode;
-  rows: Array<IMonthlyDataRow>;
+  rows: Array<IMonthly>;
+  type: 'INCOME' | 'SPEND';
+  createData: (data: ICreateMonthlyBody) => void;
+  updateData: (data: IUpdateMonthlyBody) => void;
 }
 
-const MonthlyTable: React.FC<IProps> = ({ title, rows }) => {
-  const renderCell = useCallback((row: IMonthlyDataRow, columnKey: React.Key) => {
+const MonthlyTable: React.FC<IProps> = ({ title, rows, type, createData, updateData }) => {
+  const renderCell = useCallback((row: IMonthly, columnKey: React.Key) => {
     switch (columnKey) {
       case 'name':
         return row.name;
       case 'value':
-        return row.value.toLocaleString();
+        return row.amount.toLocaleString();
       case 'done':
         return (
           <Switch
             isSelected={row.done}
-            onValueChange={(value) => {
-              console.log(value);
-            }}
+            onValueChange={(value) => handleRowChange('done', value, row)}
           />
         );
       default:
@@ -43,21 +45,12 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows }) => {
   }, []);
 
   return (
-    <SectionWrapper
-      title={
-        <div className="flex justify-between items-end">
-          <div>{title}</div>
-          {/* <Button
-            radius="full"
-            className="bg-gradient-to-tr from-blue-500 to-green-500 text-white shadow-lg"
-            size="sm"
-          >
-            Edit
-          </Button> */}
-        </div>
-      }
-    >
-      <NextUITable aria-label="Example static collection table" id="NextUITable">
+    <SectionWrapper title={<MonthlyTableTitle title={title} type={type} onAdd={handleAddClick} />}>
+      <NextUITable
+        aria-label="Example static collection table"
+        id="NextUITable"
+        disabledKeys={rows.filter((row) => row.done).map((row) => row.id)}
+      >
         <TableHeader columns={MONTHLY_TABLE_COLUMNS}>
           {(column) => {
             const width = (() => {
@@ -82,6 +75,20 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows }) => {
       </NextUITable>
     </SectionWrapper>
   );
+
+  async function handleAddClick(body: ICreateMonthlyBody) {
+    createData(body);
+  }
+
+  async function handleRowChange<TKey extends keyof IUpdateMonthlyBody>(
+    key: TKey,
+    value: IUpdateMonthlyBody[TKey],
+    row: IMonthly,
+  ) {
+    const cloned = structuredClone(row);
+    cloned[key] = value;
+    updateData(cloned);
+  }
 };
 
 export default MonthlyTable;
