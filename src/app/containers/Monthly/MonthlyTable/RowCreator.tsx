@@ -27,15 +27,15 @@ const MonthlyRowCreator: React.FC<IProps> = ({ type, onAdd }) => {
             label="항목"
             placeholder={`항목을 입력하세요. (예: ${type === 'INCOME' ? '월급' : '보험료'})`}
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={handleNameChange}
           />
           <Input
-            type="number"
+            type="tel"
             size="sm"
             label="금액"
             placeholder={`금액을 입력하세요.`}
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={handleAmountChange}
           />
         </div>
       </ModalBody>
@@ -50,6 +50,17 @@ const MonthlyRowCreator: React.FC<IProps> = ({ type, onAdd }) => {
       type,
     };
     onAdd(body);
+  }
+
+  function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = e.target;
+    setName(value);
+  }
+
+  function handleAmountChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = e.target;
+    value.replace(/[^0-9]/g, '');
+    setAmount(value);
   }
 
   async function handleClose() {
