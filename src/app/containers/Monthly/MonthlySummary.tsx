@@ -10,19 +10,17 @@ import {
   PopoverContent,
 } from '@nextui-org/react';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
 
-import { Selectors } from '@/app/recoils/selectors';
+import { IGetMonthlyDataResponse } from '@/app/api/MonthlyAPI/types';
 
 import SectionWrapper from './shared/SectionWrapper';
 
 interface IProps {
   period: React.ReactNode;
+  data: IGetMonthlyDataResponse;
 }
 
-const MonthlySummary: React.FC<IProps> = ({ period }) => {
-  const data = useRecoilValue(Selectors.monthlyDataQuery);
-
+const MonthlySummary: React.FC<IProps> = ({ period, data }) => {
   return (
     <SectionWrapper title={<>Summary {period}</>}>
       <Card style={{ width: '100%' }}>

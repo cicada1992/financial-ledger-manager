@@ -1,9 +1,9 @@
 'use client';
 import { Spacer } from '@nextui-org/react';
-import React from 'react';
-import { useRecoilValue } from 'recoil';
+import React, { useEffect, useState } from 'react';
 
-import { Selectors } from '@/app/recoils/selectors';
+import MonthlyAPI from '@/app/api/MonthlyAPI';
+import { IGetMonthlyDataResponse } from '@/app/api/MonthlyAPI/types';
 import { DateUtils } from '@/app/utils/dateUtils';
 
 import MonthlyProgress from './MonthlyProgress';
@@ -13,7 +13,11 @@ import PageContainer from '../../components/PageContainer';
 
 const MonthlyPage: React.FC = () => {
   const period = getPeriod();
-  const data = useRecoilValue(Selectors.monthlyDataQuery);
+  const [data, setData] = useState<IGetMonthlyDataResponse>({ spend: [], income: [] });
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <PageContainer>
@@ -23,7 +27,7 @@ const MonthlyPage: React.FC = () => {
       <Spacer y={4} />
       <MonthlyTable title={<>지출 {period}</>} rows={data.spend} />
       <Spacer y={4} />
-      <MonthlySummary period={period} />
+      <MonthlySummary period={period} data={data} />
     </PageContainer>
   );
 
@@ -36,8 +40,9 @@ const MonthlyPage: React.FC = () => {
       </span>
     );
   }
+  async function fetchData() {
+    const res = await MonthlyAPI.getData();
+    setData(res);
+  }
 };
 export default MonthlyPage;
-function useSWR(arg0: string, fetcher: any): { data: any } {
-  throw new Error('Function not implemented.');
-}

@@ -30,5 +30,6 @@ module.exports = {
       },
     ],
     'unused-imports/no-unused-imports': 'error',
+    'import/no-named-as-default-member': 'off',
   },
 };
