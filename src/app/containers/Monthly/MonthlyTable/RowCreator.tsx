@@ -34,7 +34,7 @@ const MonthlyRowCreator: React.FC<IProps> = ({ type, onAdd }) => {
             size="sm"
             label="금액"
             placeholder={`금액을 입력하세요.`}
-            value={amount}
+            value={amount.replace(/[^\d]/g, '')}
             onChange={handleAmountChange}
           />
         </div>
@@ -59,7 +59,7 @@ const MonthlyRowCreator: React.FC<IProps> = ({ type, onAdd }) => {
 
   function handleAmountChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { value } = e.target;
-    value.replace(/[^0-9]/g, '');
+    value.replace(/[^\d]/g, '');
     setAmount(value);
   }
 

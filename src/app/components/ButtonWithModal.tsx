@@ -39,7 +39,13 @@ const ButtonWithModal: React.FC<IProps> = ({
       <Button color="default" size="sm" {...buttonProps} onPress={onOpen} className={className}>
         {label}
       </Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} hideCloseButton placement="center">
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        hideCloseButton
+        placement="center"
+        size="xs"
+      >
         <ModalContent>
           {children}
           <ModalFooter>
