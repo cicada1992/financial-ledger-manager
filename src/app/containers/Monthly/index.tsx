@@ -82,8 +82,8 @@ const MonthlyPage: React.FC = () => {
   }
 
   async function removeData(keys: string[]) {
-    await Promise.all(keys.map((key) => MonthlyAPI.remove(key)));
-    fetchData();
+    const [res] = await Promise.all(keys.map((key) => MonthlyAPI.remove(key)));
+    setData(res);
     resetSelectedKeys();
   }
 

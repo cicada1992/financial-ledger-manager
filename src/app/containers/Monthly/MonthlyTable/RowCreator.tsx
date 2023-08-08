@@ -42,7 +42,8 @@ const MonthlyRowCreator: React.FC<IProps> = ({ type, onAdd }) => {
     </ButtonWithModal>
   );
 
-  async function handleAddClick() {
+  function handleAddClick() {
+    if (!amount || !name) throw new Error('항목과 금액을 입력하세요.');
     const body: ICreateMonthlyBody = {
       name,
       amount: amount ? Number(amount) : 0,
