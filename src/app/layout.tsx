@@ -13,6 +13,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Financial Management',
   description: 'Financial Management For HYJ & KYB',
+  viewport: 'width=device-width, initial-scale=1.0, user-scalable=no,maximum-scale=1',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
