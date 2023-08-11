@@ -2,9 +2,8 @@
 import { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
-import { LocalStorageManager } from '@/app/lib/LocalStorageManager';
-
 import WithMiddleware from './middleware';
+import { LocalStorageManager } from '../../lib/LocalStorageManager';
 
 class EdgeAPI extends WithMiddleware {
   private readonly prefix: string;

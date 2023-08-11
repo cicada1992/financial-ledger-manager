@@ -24,7 +24,7 @@ import UserAvartar from './UserAvartar';
 const Nav: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const currentPathName = usePathname();
-  const { userInfo } = useUserInfo();
+  const userInfo = useUserInfo();
 
   return (
     <Navbar onMenuOpenChange={(value) => setIsMenuOpen(Boolean(value))}>

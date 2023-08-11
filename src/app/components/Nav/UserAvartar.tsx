@@ -4,7 +4,8 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, User } from '@ne
 import React from 'react';
 
 import { IUserInfo } from '@/app/api/AuthAPI/types';
-import { LocalStorageManager } from '@/app/lib/LocalStorageManager';
+
+import { LocalStorageManager } from '../../lib/LocalStorageManager';
 
 interface IProps {
   userInfo: IUserInfo;

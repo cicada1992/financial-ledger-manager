@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import MonthlyAPI from '@/app/api/MonthlyAPI';
 import { ICreateMonthlyBody, IMonthly, IUpdateMonthlyBody } from '@/app/api/MonthlyAPI/types';
+import { useUserInfo } from '@/app/hooks/useAuth';
 import { DateUtils } from '@/app/utils/dateUtils';
 
 import MonthlyProgress from './MonthlyProgress';
@@ -23,6 +24,7 @@ const MonthlyPage: React.FC = () => {
   const [data, setData] = useState<IMonthly[]>([]);
   const incomeTableRef = useRef<IMonthlyTableRef>(null);
   const spendTableRef = useRef<IMonthlyTableRef>(null);
+  const userInfo = useUserInfo();
 
   useEffect(() => {
     fetchData();
@@ -65,7 +67,8 @@ const MonthlyPage: React.FC = () => {
   );
 
   async function fetchData() {
-    const res = await MonthlyAPI.getData();
+    if (!userInfo) throw new Error('로그인이 필요합니다.');
+    const res = await MonthlyAPI.getData(userInfo.email);
     setData(res);
   }
 

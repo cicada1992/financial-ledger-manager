@@ -1,6 +1,5 @@
-import { LocalStorageManager } from '@/app/lib/LocalStorageManager';
-
 import { IUserPayload, ISignUpResponse, ILoginResponse, IUserInfo } from './types';
+import { LocalStorageManager } from '../../lib/LocalStorageManager';
 import BaseAPI from '../BaseAPI';
 
 namespace AuthAPI {

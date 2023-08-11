@@ -5,6 +5,7 @@ import React from 'react';
 
 import { ICreateMonthlyBody } from '@/app/api/MonthlyAPI/types';
 import ButtonWithModal from '@/app/components/ButtonWithModal';
+import { useUserInfo } from '@/app/hooks/useAuth';
 
 import { TYPE_AND_LABEL_MAPPINGS } from '..';
 
@@ -16,6 +17,7 @@ interface IProps {
 const MonthlyRowCreator: React.FC<IProps> = ({ type, onAdd }) => {
   const [name, setName] = React.useState('');
   const [amount, setAmount] = React.useState('');
+  const userInfo = useUserInfo();
 
   return (
     <ButtonWithModal label="항목 추가" onOk={handleAddClick} onClosed={handleClose}>
@@ -44,11 +46,13 @@ const MonthlyRowCreator: React.FC<IProps> = ({ type, onAdd }) => {
 
   function handleAddClick() {
     if (!amount || !name) throw new Error('항목과 금액을 입력하세요.');
+    if (!userInfo) throw new Error('로그인이 필요합니다.');
     const body: ICreateMonthlyBody = {
       name,
       amount: amount ? Number(amount) : 0,
       done: false,
       type,
+      user: userInfo.email,
     };
     onAdd(body);
   }

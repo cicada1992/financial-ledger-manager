@@ -12,7 +12,7 @@ interface IProps {
 }
 
 const PageContainer: React.FC<IProps> = ({ children }) => {
-  const { userInfo } = useUserInfo();
+  const userInfo = useUserInfo();
   return <main className={main}>{userInfo ? children : renderLandingPage()}</main>;
 
   function renderLandingPage() {
