@@ -4,8 +4,7 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, User } from '@ne
 import React from 'react';
 
 import { IUserInfo } from '@/app/api/AuthAPI/types';
-
-import { LocalStorageManager } from '../../lib/LocalStorageManager';
+import { LocalStorageHelper } from '@/app/lib/LocalStorageHelper';
 
 interface IProps {
   userInfo: IUserInfo;
@@ -32,7 +31,7 @@ const UserAvartar: React.FC<IProps> = ({ userInfo }) => {
   );
 
   function handleLogout() {
-    LocalStorageManager.removeJWT();
+    LocalStorageHelper.removeJWT();
     window.location.reload();
   }
 };

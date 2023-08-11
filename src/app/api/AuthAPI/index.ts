@@ -1,5 +1,6 @@
+import { LocalStorageHelper } from '@/app/lib/LocalStorageHelper';
+
 import { IUserPayload, ISignUpResponse, ILoginResponse, IUserInfo } from './types';
-import { LocalStorageManager } from '../../lib/LocalStorageManager';
 import BaseAPI from '../BaseAPI';
 
 namespace AuthAPI {
@@ -7,13 +8,13 @@ namespace AuthAPI {
 
   export async function signUp(body: IUserPayload): Promise<void> {
     const { accessToken } = await api.post<ISignUpResponse>('/register', body);
-    LocalStorageManager.setJWT(accessToken);
+    LocalStorageHelper.setJWT(accessToken);
     window.location.reload();
   }
 
   export async function login(body: Pick<IUserPayload, 'email' | 'password'>): Promise<void> {
     const { accessToken } = await api.post<ILoginResponse>('/login', body);
-    LocalStorageManager.setJWT(accessToken);
+    LocalStorageHelper.setJWT(accessToken);
     window.location.reload();
   }
 
