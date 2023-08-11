@@ -36,7 +36,7 @@ const ButtonWithModal: React.FC<IProps> = ({
 
   return (
     <>
-      <Button color="default" size="sm" {...buttonProps} onPress={onOpen} className={className}>
+      <Button color="default" size="sm" {...buttonProps} onClick={onOpen} className={className}>
         {label}
       </Button>
       <Modal

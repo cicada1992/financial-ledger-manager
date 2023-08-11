@@ -2,6 +2,8 @@
 import { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
+import { LocalStorageManager } from '@/app/lib/LocalStorageManager';
+
 import WithMiddleware from './middleware';
 
 class EdgeAPI extends WithMiddleware {
@@ -13,6 +15,7 @@ class EdgeAPI extends WithMiddleware {
       timeout: 15000,
       timeoutErrorMessage: '[타임아웃] 요청 시간이 지났습니다.',
       baseURL: 'http://localhost:8912',
+      headers: { Authorization: `Bearer ${LocalStorageManager.getJWT()}` },
     };
     super(config);
 

@@ -37,42 +37,10 @@ class APIError extends Error {
 }
 
 class ErrorManager {
-  private serverErrorMessage = '서버가 원활하지 않습니다.';
   private fallbackErrorMessage = '서비스가 원활하지 않습니다.';
 
-  /**
-   * Axios Error 인터셉트 후 APIError 인스턴스로 wrapping
-   * @deprecated Axios middleware 밖에선 사용하지 않습니다.
-   */
-  interceptAxiosError(error: AxiosError): Promise<void> {
-    return Promise.reject(new APIError(error));
-  }
-
-  private extractErrorContent(error: APIError | Error | string | IAPIErrorResponse): string {
-    /**
-     * 응답값이 200으로 떨어지는데, 응답값으로 에러를 내려주는 경우
-     * Axios Error 인터셉트 로직을 타지 않아서 APIError 객체는 아니지만
-     * IAPIErrorResponse 타입의 객체가 들어올 수 있음
-     * */
-    if (error instanceof APIError || this.instanceOfIAPIErrorResponse(error)) {
-      const isSeverError =
-        !this.instanceOfIAPIErrorResponse(error) && error.statusEnum === HTTPStatus.ServerError;
-      return isSeverError ? this.serverErrorMessage : error.errorMessage;
-    }
-    if (error instanceof Error) {
-      return error.message;
-    }
-    return error || this.fallbackErrorMessage;
-  }
-
-  private instanceOfIAPIErrorResponse(
-    error: APIError | Error | string | IAPIErrorResponse,
-  ): error is IAPIErrorResponse {
-    return error.hasOwnProperty('errorType') && error.hasOwnProperty('errorMessage');
-  }
-
-  getErrorText(error: APIError | Error | string): string {
-    return this.extractErrorContent(error);
+  alert(error: Error | any): void {
+    alert(error?.message || this.fallbackErrorMessage);
   }
 }
 

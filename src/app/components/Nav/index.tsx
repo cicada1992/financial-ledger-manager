@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  Button,
   Navbar,
   NavbarBrand,
   NavbarContent,
@@ -16,11 +15,16 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState } from 'react';
 
+import { useUserInfo } from '@/app/hooks/useAuth';
+
 import { MENU_ITEMS } from './constants';
+import SignUpButton from './SignUpButton';
+import UserAvartar from './UserAvartar';
 
 const Nav: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const currentPathName = usePathname();
+  const { userInfo } = useUserInfo();
 
   return (
     <Navbar onMenuOpenChange={(value) => setIsMenuOpen(Boolean(value))}>
@@ -43,14 +47,7 @@ const Nav: React.FC = () => {
         ))}
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
+        <NavbarItem>{userInfo ? <UserAvartar userInfo={userInfo} /> : <SignUpButton />}</NavbarItem>
       </NavbarContent>
       <NavbarMenu>
         {MENU_ITEMS.map((item, index) => (

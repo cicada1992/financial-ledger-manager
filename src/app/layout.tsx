@@ -4,6 +4,7 @@ import React from 'react';
 
 import Nav from '@/app/components/Nav';
 
+import AuthProvider from './components/AuthContainer';
 import './globals.css';
 import { content } from './layout.css';
 import { Providers } from './providers';
@@ -21,8 +22,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <Nav />
-          <div className={content}>{children}</div>
+          <AuthProvider>
+            <Nav />
+            <div className={content}>{children}</div>
+          </AuthProvider>
         </Providers>
       </body>
     </html>
