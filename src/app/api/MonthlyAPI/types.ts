@@ -11,5 +11,6 @@ export interface ICreateMonthlyBody {
   amount: number;
   done: boolean;
   type: 'INCOME' | 'SPEND';
+  user: string;
 }
 export interface IUpdateMonthlyBody extends IMonthly {}
