@@ -4,6 +4,8 @@ export interface IMonthly {
   amount: number;
   done: boolean;
   type: 'INCOME' | 'SPEND';
+  /** 유저 이메일 */
+  userId: string;
 }
 
 export interface ICreateMonthlyBody {
@@ -11,6 +13,16 @@ export interface ICreateMonthlyBody {
   amount: number;
   done: boolean;
   type: 'INCOME' | 'SPEND';
-  user: string;
+  /** 유저 이메일 */
+  userId: string;
 }
-export interface IUpdateMonthlyBody extends IMonthly {}
+
+export interface IUpdateMonthlyBody {
+  id: string;
+  name: string;
+  amount: number;
+  done: boolean;
+  type: 'INCOME' | 'SPEND';
+  /** 유저 이메일 */
+  userId: string;
+}

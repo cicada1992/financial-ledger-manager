@@ -52,7 +52,7 @@ const MonthlyRowCreator: React.FC<IProps> = ({ type, onAdd }) => {
       amount: amount ? Number(amount) : 0,
       done: false,
       type,
-      user: userInfo.email,
+      userId: userInfo.email,
     };
     onAdd(body);
   }

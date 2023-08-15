@@ -121,14 +121,21 @@ const MonthlyTable = forwardRef<IMonthlyTableRef, IProps>((props, ref) => {
     createData(body);
   }
 
-  function handleRowChange<TKey extends keyof IUpdateMonthlyBody>(
+  function handleRowChange<TKey extends keyof IMonthly>(
     key: TKey,
-    value: IUpdateMonthlyBody[TKey],
+    value: IMonthly[TKey],
     row: IMonthly,
   ) {
     const cloned = structuredClone(row);
     cloned[key] = value;
-    updateData(cloned);
+    updateData({
+      id: cloned.id,
+      done: cloned.done,
+      type: cloned.type,
+      name: cloned.name,
+      amount: cloned.amount,
+      userId: cloned.userId,
+    });
   }
 
   function handleRemoveClick() {

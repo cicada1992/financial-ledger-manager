@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MonthlyAPI from '@/app/api/MonthlyAPI';
 import { ICreateMonthlyBody, IMonthly, IUpdateMonthlyBody } from '@/app/api/MonthlyAPI/types';
 import { useUserInfo } from '@/app/hooks/useAuth';
+import ErrorManager from '@/app/lib/ErrorManager';
 import { DateUtils } from '@/app/utils/dateUtils';
 
 import MonthlyProgress from './MonthlyProgress';
@@ -28,7 +29,7 @@ const MonthlyPage: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [userInfo]);
 
   return (
     <PageContainer>
@@ -67,9 +68,13 @@ const MonthlyPage: React.FC = () => {
   );
 
   async function fetchData() {
-    if (!userInfo) throw new Error('로그인이 필요합니다.');
-    const res = await MonthlyAPI.getData(userInfo.email);
-    setData(res);
+    if (!userInfo) return;
+    try {
+      const res = await MonthlyAPI.getData(userInfo.email);
+      setData(res);
+    } catch (e) {
+      ErrorManager.alert(e);
+    }
   }
 
   async function createData(body: ICreateMonthlyBody) {
