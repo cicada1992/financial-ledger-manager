@@ -4,7 +4,7 @@ import BaseAPI from '../BaseAPI';
 namespace MonthlyAPI {
   const api = new BaseAPI('/monthly');
 
-  export function getData(userId: string): Promise<IMonthly[]> {
+  export function getList(userId: string): Promise<IMonthly[]> {
     return api.get(`/${userId}`);
   }
 

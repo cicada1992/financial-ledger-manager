@@ -1,11 +1,10 @@
 'use client';
 import { Spacer } from '@nextui-org/react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-import MonthlyAPI from '@/app/api/MonthlyAPI';
-import { ICreateMonthlyBody, IMonthly, IUpdateMonthlyBody } from '@/app/api/MonthlyAPI/types';
-import { useUserInfo } from '@/app/hooks/useAuth';
-import ErrorManager from '@/app/lib/ErrorManager';
+import { ICreateMonthlyBody, IUpdateMonthlyBody } from '@/app/api/MonthlyAPI/types';
+import { useMonthlyStore } from '@/app/store/monthlyStore';
+import { useUserStore } from '@/app/store/userStore';
 import { DateUtils } from '@/app/utils/dateUtils';
 
 import MonthlyProgress from './MonthlyProgress';
@@ -22,14 +21,15 @@ const SPACE = 6;
 
 const MonthlyPage: React.FC = () => {
   const period = getPeriod();
-  const [data, setData] = useState<IMonthly[]>([]);
   const incomeTableRef = useRef<IMonthlyTableRef>(null);
   const spendTableRef = useRef<IMonthlyTableRef>(null);
-  const userInfo = useUserInfo();
+  const userEmail = useUserStore((state) => state.userInfo.email);
+  const monthlyStore = useMonthlyStore();
 
   useEffect(() => {
-    fetchData();
-  }, [userInfo]);
+    if (!userEmail) return;
+    monthlyStore.fetchList(userEmail);
+  }, [userEmail]);
 
   return (
     <PageContainer>
@@ -42,7 +42,7 @@ const MonthlyPage: React.FC = () => {
             {TYPE_AND_LABEL_MAPPINGS['INCOME']} {period}
           </>
         }
-        rows={data.filter(({ type }) => type === 'INCOME')}
+        rows={monthlyStore.list.filter(({ type }) => type === 'INCOME')}
         type="INCOME"
         createData={createData}
         updateData={updateData}
@@ -56,43 +56,27 @@ const MonthlyPage: React.FC = () => {
             {TYPE_AND_LABEL_MAPPINGS['SPEND']} {period}
           </>
         }
-        rows={data.filter(({ type }) => type === 'SPEND')}
+        rows={monthlyStore.list.filter(({ type }) => type === 'SPEND')}
         type="SPEND"
         createData={createData}
         updateData={updateData}
         removeData={removeData}
       />
       <Spacer y={SPACE} />
-      <MonthlySummary period={period} data={data} />
+      <MonthlySummary period={period} data={monthlyStore.list} />
     </PageContainer>
   );
 
-  async function fetchData() {
-    if (!userInfo) return;
-    try {
-      const res = await MonthlyAPI.getData(userInfo.email);
-      setData(res);
-    } catch (e) {
-      ErrorManager.alert(e);
-    }
+  function createData(body: ICreateMonthlyBody) {
+    monthlyStore.create(body, resetSelectedKeys);
   }
 
-  async function createData(body: ICreateMonthlyBody) {
-    const res = await MonthlyAPI.create(body);
-    setData(res);
-    resetSelectedKeys();
+  function updateData(body: IUpdateMonthlyBody) {
+    monthlyStore.update(body, resetSelectedKeys);
   }
 
-  async function updateData(body: IUpdateMonthlyBody) {
-    const res = await MonthlyAPI.update(body);
-    setData(res);
-    resetSelectedKeys();
-  }
-
-  async function removeData(keys: string[]) {
-    const [res] = await Promise.all(keys.map((key) => MonthlyAPI.remove(key)));
-    setData(res);
-    resetSelectedKeys();
+  function removeData(keys: string[]) {
+    monthlyStore.remove(keys, resetSelectedKeys);
   }
 
   function getPeriod() {

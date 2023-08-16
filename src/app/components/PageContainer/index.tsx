@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { useUserInfo } from '@/app/hooks/useAuth';
+import { useUserStore } from '@/app/store/userStore';
 
 import { main } from './pageContainer.css';
 import LoginButton from '../Login';
@@ -12,8 +12,14 @@ interface IProps {
 }
 
 const PageContainer: React.FC<IProps> = ({ children }) => {
-  const userInfo = useUserInfo();
-  return <main className={main}>{userInfo ? children : renderLandingPage()}</main>;
+  const { userInfo, fetchUserInfo } = useUserStore();
+  const hasUserInfo = userInfo.email && userInfo.username;
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  return <main className={main}>{hasUserInfo ? children : renderLandingPage()}</main>;
 
   function renderLandingPage() {
     return (

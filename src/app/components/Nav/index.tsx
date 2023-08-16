@@ -15,7 +15,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState } from 'react';
 
-import { useUserInfo } from '@/app/hooks/useAuth';
+import { useUserStore } from '@/app/store/userStore';
 
 import { MENU_ITEMS } from './constants';
 import SignUpButton from './SignUpButton';
@@ -24,7 +24,7 @@ import UserAvartar from './UserAvartar';
 const Nav: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const currentPathName = usePathname();
-  const userInfo = useUserInfo();
+  const userInfo = useUserStore((state) => state.userInfo);
 
   return (
     <Navbar onMenuOpenChange={(value) => setIsMenuOpen(Boolean(value))}>
