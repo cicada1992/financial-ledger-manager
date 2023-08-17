@@ -25,6 +25,7 @@ const Nav: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const currentPathName = usePathname();
   const userInfo = useUserStore((state) => state.userInfo);
+  const hasUserInfo = Boolean(userInfo.email && userInfo.username);
 
   return (
     <Navbar onMenuOpenChange={(value) => setIsMenuOpen(Boolean(value))}>
@@ -47,7 +48,9 @@ const Nav: React.FC = () => {
         ))}
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem>{userInfo ? <UserAvartar userInfo={userInfo} /> : <SignUpButton />}</NavbarItem>
+        <NavbarItem>
+          {hasUserInfo ? <UserAvartar userInfo={userInfo} /> : <SignUpButton />}
+        </NavbarItem>
       </NavbarContent>
       <NavbarMenu>
         {MENU_ITEMS.map((item, index) => (

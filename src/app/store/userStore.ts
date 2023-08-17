@@ -5,6 +5,8 @@ import AuthAPI from '../api/AuthAPI';
 import { IUserInfo } from '../api/AuthAPI/types';
 import ErrorManager from '../lib/ErrorManager';
 
+const LOADING_KEY = 'init';
+
 interface IUserStore {
   userInfo: IUserInfo;
   fetchUserInfo(): Promise<void>;
@@ -20,13 +22,13 @@ export const useUserStore = create<IUserStore>((set) => ({
   fetchUserInfo: async () => {
     const loadingStore = useLoadingStore.getState();
     try {
-      loadingStore.startLoading('fetchUserInfo');
+      loadingStore.startLoading(LOADING_KEY);
       const userInfo = await AuthAPI.getUserInfo();
       set({ userInfo });
     } catch (e) {
-      ErrorManager.alert(e);
+      // no-op
     } finally {
-      loadingStore.finishLoading('fetchUserInfo');
+      loadingStore.finishLoading(LOADING_KEY);
     }
   },
 }));

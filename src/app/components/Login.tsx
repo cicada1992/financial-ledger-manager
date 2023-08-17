@@ -28,6 +28,7 @@ const LoginButton: React.FC = () => {
   async function handleSubmit() {
     try {
       await AuthAPI.login({ email, password });
+      resetFields();
     } catch (e) {
       ErrorManager.alert(e);
     }
