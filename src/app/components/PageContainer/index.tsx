@@ -1,5 +1,6 @@
 'use client';
 
+import { CircularProgress } from '@nextui-org/react';
 import React, { CSSProperties, useEffect } from 'react';
 
 import { useLoadingStore } from '@/app/store/loadingStore';
@@ -7,7 +8,6 @@ import { useUserStore } from '@/app/store/userStore';
 
 import { main } from './pageContainer.css';
 import LoginButton from '../Login';
-import { CircularProgress } from '@nextui-org/react';
 
 interface IProps {
   children: React.ReactNode;

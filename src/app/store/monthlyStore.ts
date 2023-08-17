@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 
+import { useLoadingStore } from './loadingStore';
 import MonthlyAPI from '../api/MonthlyAPI';
 import { ICreateMonthlyBody, IMonthly, IUpdateMonthlyBody } from '../api/MonthlyAPI/types';
-import { useLoadingStore } from './loadingStore';
 import ErrorManager from '../lib/ErrorManager';
 
 const LOADING_KEY = 'normal';

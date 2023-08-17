@@ -3,7 +3,6 @@ import { create } from 'zustand';
 import { useLoadingStore } from './loadingStore';
 import AuthAPI from '../api/AuthAPI';
 import { IUserInfo } from '../api/AuthAPI/types';
-import ErrorManager from '../lib/ErrorManager';
 
 const LOADING_KEY = 'init';
 
