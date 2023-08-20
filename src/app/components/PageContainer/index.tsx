@@ -6,8 +6,8 @@ import React, { CSSProperties, useEffect } from 'react';
 import { useLoadingStore } from '@/app/store/loadingStore';
 import { useUserStore } from '@/app/store/userStore';
 
+import LoginForm from './LoginForm';
 import { main } from './pageContainer.css';
-import LoginForm from '../../login/LoginForm';
 
 interface IProps {
   children: React.ReactNode;

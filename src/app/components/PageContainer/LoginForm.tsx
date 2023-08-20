@@ -6,15 +6,17 @@ import React from 'react';
 import AuthAPI from '@/app/api/AuthAPI';
 import ErrorManager from '@/app/lib/ErrorManager';
 
-import EmailField from '../components/Nav/fields/Email';
-import PasswordField from '../components/Nav/fields/Password';
+import EmailField from '../Nav/fields/Email';
+import PasswordField from '../Nav/fields/Password';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
   return (
-    <div className="flex flex-col w-full max-w-xs justify-center mt-60">
+    <div className="flex flex-col w-full max-w-xs justify-center items-center mt-40">
+      <h2>Financial Manager (Logo)</h2>
+      <Spacer y={2} />
       <EmailField value={email} onChange={setEmail} />
       <Spacer y={2} />
       <PasswordField value={password} onChange={setPassword} />
