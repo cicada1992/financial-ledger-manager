@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Home: React.FC = () => {
-  return '홈페이지입니다.';
+  // will be redirected to "/monthly" in next.config.js
+  return null;
 };
 export default Home;
