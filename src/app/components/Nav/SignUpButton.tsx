@@ -6,10 +6,10 @@ import React from 'react';
 import AuthAPI from '@/app/api/AuthAPI';
 import ErrorManager from '@/app/lib/ErrorManager';
 
-import EmailField from './fields/Email';
-import PasswordField from './fields/Password';
-import UsernameField from './fields/Username';
 import ButtonWithModal from '../ButtonWithModal';
+import EmailField from '../fields/Email';
+import PasswordField from '../fields/Password';
+import UsernameField from '../fields/Username';
 
 const SignUpButton: React.FC = () => {
   const [email, setEmail] = React.useState('');

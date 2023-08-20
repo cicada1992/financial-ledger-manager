@@ -6,8 +6,8 @@ import React from 'react';
 import AuthAPI from '@/app/api/AuthAPI';
 import ErrorManager from '@/app/lib/ErrorManager';
 
-import EmailField from '../Nav/fields/Email';
-import PasswordField from '../Nav/fields/Password';
+import EmailField from '../fields/Email';
+import PasswordField from '../fields/Password';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = React.useState('');
