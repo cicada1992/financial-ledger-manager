@@ -14,18 +14,19 @@ interface IProps {
 }
 
 const MonthlyProgress: React.FC<IProps> = ({ title }) => {
-  const baseMonth = useMonthlyStore((state) => state.baseMonth);
-  const getValue = useCallback(() => DateUtils.getProgressInfo(baseMonth), [baseMonth]);
+  const date = useMonthlyStore((state) => state.date);
+  const getValue = useCallback(() => DateUtils.getProgressInfo(date), [date]);
+  const { ratio, remains } = getValue();
 
   return (
     <SectionWrapper title={title}>
       <Popover placement="bottom-start">
         <PopoverTrigger>
-          <Progress value={getValue().ratio} className={`max-w-md ${progress}`} />
+          <Progress value={ratio} className={`max-w-md ${progress}`} />
         </PopoverTrigger>
         <PopoverContent>
           <div className="px-1 py-2">
-            <div className="text-tiny">월급날까지 {getValue().remains}일 남았어요.</div>
+            <div className="text-tiny">월급날까지 {remains}일 남았어요.</div>
           </div>
         </PopoverContent>
       </Popover>

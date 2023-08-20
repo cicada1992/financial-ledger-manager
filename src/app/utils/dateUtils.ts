@@ -1,47 +1,43 @@
+import dayjs, { Dayjs } from 'dayjs';
+
+import { YYYYMM } from '@/types';
+
 export namespace DateUtils {
-  function getKoreanNow() {
-    const now = new Date();
-    const utc = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
-    // 한국 시간은 UTC보다 9시간 빠름 (9시간의 밀리세컨드 표현)
-    const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
-    return new Date(utc + KR_TIME_DIFF);
-  }
-  export function getKoreanDateInfo() {
-    const korNow = getKoreanNow();
-    const thisYear = korNow.getFullYear();
-    const thisMonth = korNow.getMonth() + 1;
-    const day = korNow.getDate();
-    const isDaySameOrBiggerThan25 = day >= 25;
-    const startMonth = isDaySameOrBiggerThan25 ? thisMonth : thisMonth - 1;
-    return {
-      thisYear,
-      startMonth,
-      day,
-    };
+  /** TODO: 추후 서버에 저장된 세팅값으로 설정해야함. */
+  const baseDay = 25;
+
+  export function getYearAndMonth(date: Dayjs) {
+    const dateYear = date.year();
+    const month = date.month() + 1;
+    const isDaySameOrBiggerThan25 = date.date() >= 25;
+    const computedMonth = isDaySameOrBiggerThan25 ? month : month - 1;
+    // 익월이 내년 1월일때, 위연산에서 "1-0=0"이 되면 12월로 보여주어야한다.
+    const baseMonth = computedMonth === 0 ? 12 : computedMonth;
+    return { year: computedMonth === 0 ? dateYear - 1 : dateYear, baseMonth };
   }
 
-  export function getProgressInfo(baseMonth: number) {
-    const { thisYear, startMonth } = getKoreanDateInfo();
-    const endMonthByBaseMonth = baseMonth + 1;
-    const korNow = getKoreanNow();
-    const last = new Date(
-      endMonthByBaseMonth === 1 ? thisYear + 1 : thisYear,
-      endMonthByBaseMonth - 1,
-      25,
-    ).getTime();
-    const current = korNow.getTime();
-    const total = getDaysInMonth();
+  export function getProgressInfo(date: Dayjs) {
+    const now = getNow();
+    const { year, baseMonth } = getYearAndMonth(date);
+    // 이번달 시작기준일
+    const thisStartDate = dayjs(`${year}-${baseMonth}-${baseDay}`).startOf('day');
+    // 익월 시작기준일
+    const nextStartDate = dayjs(thisStartDate).add(1, 'month').add(1, 'day').startOf('day');
+    const total = nextStartDate.diff(thisStartDate, 'day');
     const remains = (() => {
-      if (baseMonth < startMonth) return 0;
-      return Math.floor((last - current) / (24 * 3600 * 1000)) + 1;
+      if (now.month() > baseMonth) return 0;
+      return nextStartDate.diff(now, 'day');
     })();
-    return { ratio: remains <= 0 ? 100 : ((total - remains) / total) * 100, remains };
+    const ratio = remains <= 0 ? 100 : ((total - remains) / total) * 100;
+    return { ratio, remains };
   }
 
-  function getDaysInMonth() {
-    const korNow = getKoreanNow();
-    const year = korNow.getFullYear();
-    const month = korNow.getMonth() + 1;
-    return new Date(year, month, 0).getDate();
+  export function getDateParam(date: Dayjs): YYYYMM {
+    const { year, baseMonth } = getYearAndMonth(date);
+    return `${year}-${String(baseMonth).padStart(2, '0')}` as YYYYMM;
+  }
+
+  function getNow() {
+    return dayjs();
   }
 }

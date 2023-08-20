@@ -7,6 +7,7 @@ import { ICreateMonthlyBody } from '@/app/api/MonthlyAPI/types';
 import ButtonWithModal from '@/app/components/ButtonWithModal';
 import { useMonthlyStore } from '@/app/store/monthlyStore';
 import { useUserStore } from '@/app/store/userStore';
+import { YYYYMMDD } from '@/types';
 
 import { TYPE_AND_LABEL_MAPPINGS } from '../page';
 
@@ -19,7 +20,7 @@ const MonthlyRowCreator: React.FC<IProps> = ({ type, onAdd }) => {
   const [name, setName] = React.useState('');
   const [amount, setAmount] = React.useState('');
   const userEmail = useUserStore((state) => state.userInfo.email);
-  const { baseMonth } = useMonthlyStore();
+  const date = useMonthlyStore((state) => state.date);
 
   return (
     <ButtonWithModal label="항목 추가" onOk={handleAddClick} onClosed={handleClose}>
@@ -54,7 +55,7 @@ const MonthlyRowCreator: React.FC<IProps> = ({ type, onAdd }) => {
       amount: amount ? Number(amount) : 0,
       done: false,
       type,
-      month: baseMonth,
+      date: date.format('YYYY-MM-DD') as YYYYMMDD,
       userId: userEmail,
     };
     onAdd(body);

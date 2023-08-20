@@ -28,11 +28,9 @@ interface IProps {
 }
 
 /* eslint-disable */
-const MonthlyTable: React.FC<IProps> = (props) => {
+const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
   const [selectedKeys, setSelectedKeys] = React.useState<Set<string>>(new Set());
   const monthlyStore = useMonthlyStore();
-
-  const { title, rows, type } = props;
   const renderCell = useCallback((row: IMonthly, columnKey: React.Key) => {
     switch (columnKey) {
       case 'name':
@@ -60,6 +58,7 @@ const MonthlyTable: React.FC<IProps> = (props) => {
         return '-';
     }
   }, []);
+
   return (
     <SectionWrapper title={<MonthlyTableTitle title={title} />}>
       <NextUITable
@@ -87,7 +86,28 @@ const MonthlyTable: React.FC<IProps> = (props) => {
         <TableBody items={rows} emptyContent={'데이터를 추가해주세요.'}>
           {(item) => (
             <TableRow key={item.id}>
-              {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+              {(columnKey) => (
+                <TableCell
+                  onMouseDown={(e) => {
+                    const timer = setTimeout(() => {
+                      alert('삭제하시겠습니까?');
+                    }, 3000);
+                    e.currentTarget.onmouseup = () => {
+                      clearTimeout(timer);
+                    };
+                  }}
+                  onTouchStart={(e) => {
+                    const timer = setTimeout(() => {
+                      alert('삭제하시겠습니까?');
+                    }, 3000);
+                    e.currentTarget.ontouchend = () => {
+                      clearTimeout(timer);
+                    };
+                  }}
+                >
+                  {renderCell(item, columnKey)}
+                </TableCell>
+              )}
             </TableRow>
           )}
         </TableBody>
