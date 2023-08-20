@@ -15,19 +15,26 @@ export namespace DateUtils {
     const startMonth = isDaySameOrBiggerThan25 ? thisMonth : thisMonth - 1;
     return {
       thisYear,
-      startMonth: startMonth,
-      endMonth: startMonth + 1,
+      startMonth,
       day,
     };
   }
 
-  export function getProgressInfo() {
-    const { thisYear, endMonth } = getKoreanDateInfo();
+  export function getProgressInfo(baseMonth: number) {
+    const { thisYear, startMonth } = getKoreanDateInfo();
+    const endMonthByBaseMonth = baseMonth + 1;
     const korNow = getKoreanNow();
-    const last = new Date(endMonth === 1 ? thisYear + 1 : thisYear, endMonth - 1, 25).getTime();
+    const last = new Date(
+      endMonthByBaseMonth === 1 ? thisYear + 1 : thisYear,
+      endMonthByBaseMonth - 1,
+      25,
+    ).getTime();
     const current = korNow.getTime();
     const total = getDaysInMonth();
-    const remains = Math.floor((last - current) / (24 * 3600 * 1000)) + 1;
+    const remains = (() => {
+      if (baseMonth < startMonth) return 0;
+      return Math.floor((last - current) / (24 * 3600 * 1000)) + 1;
+    })();
     return { ratio: remains <= 0 ? 100 : ((total - remains) / total) * 100, remains };
   }
 

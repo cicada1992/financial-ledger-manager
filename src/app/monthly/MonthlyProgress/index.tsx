@@ -3,6 +3,7 @@
 import { Popover, PopoverContent, PopoverTrigger, Progress } from '@nextui-org/react';
 import React, { useCallback } from 'react';
 
+import { useMonthlyStore } from '@/app/store/monthlyStore';
 import { DateUtils } from '@/app/utils/dateUtils';
 
 import { progress } from './MonthlyProgress.css';
@@ -13,7 +14,8 @@ interface IProps {
 }
 
 const MonthlyProgress: React.FC<IProps> = ({ title }) => {
-  const getValue = useCallback(() => DateUtils.getProgressInfo(), []);
+  const baseMonth = useMonthlyStore((state) => state.baseMonth);
+  const getValue = useCallback(() => DateUtils.getProgressInfo(baseMonth), [baseMonth]);
 
   return (
     <SectionWrapper title={title}>
