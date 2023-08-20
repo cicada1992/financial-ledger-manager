@@ -8,7 +8,10 @@ import { useMonthlyStore } from '../store/monthlyStore';
 const MonthlyMonthController: React.FC = () => {
   const { baseMonth: startMonth, setToPrevMonth, setToNextMonth } = useMonthlyStore();
   return (
-    <div className="w-full flex justify-between">
+    <div
+      className="sticky 74-top-px bg-white w-full flex justify-between pb-4"
+      style={{ top: 74, zIndex: 1 }}
+    >
       <Button isIconOnly size="sm" onClick={setToPrevMonth}>
         {'<'}
       </Button>
