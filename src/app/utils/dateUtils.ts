@@ -28,7 +28,7 @@ export namespace DateUtils {
     const last = new Date(endMonth === 1 ? thisYear + 1 : thisYear, endMonth - 1, 25).getTime();
     const current = korNow.getTime();
     const total = getDaysInMonth();
-    const remains = Math.floor((last - current) / (24 * 3600 * 1000));
+    const remains = Math.floor((last - current) / (24 * 3600 * 1000)) + 1;
     return { ratio: remains <= 0 ? 100 : ((total - remains) / total) * 100, remains };
   }
 

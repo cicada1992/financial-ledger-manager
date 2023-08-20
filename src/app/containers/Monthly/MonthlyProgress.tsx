@@ -13,9 +13,8 @@ interface IProps {
 }
 
 const MonthlyProgress: React.FC<IProps> = ({ title }) => {
-  const getValue = useCallback(() => {
-    return DateUtils.getProgressInfo();
-  }, []);
+  const getValue = useCallback(() => DateUtils.getProgressInfo(), []);
+
   return (
     <SectionWrapper title={title}>
       <Popover placement="bottom-start">
