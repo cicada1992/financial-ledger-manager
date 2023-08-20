@@ -22,7 +22,7 @@ const MonthlyProgress: React.FC<IProps> = ({ title }) => {
     <SectionWrapper title={title}>
       <Popover placement="bottom-start">
         <PopoverTrigger>
-          <Progress value={ratio} className={`max-w-md ${progress}`} />
+          <Progress value={ratio} className={progress} />
         </PopoverTrigger>
         <PopoverContent>
           <div className="px-1 py-2">
