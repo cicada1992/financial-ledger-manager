@@ -5,7 +5,6 @@ import React from 'react';
 
 import { ICreateMonthlyBody } from '@/app/api/MonthlyAPI/types';
 import ButtonWithModal from '@/app/components/ButtonWithModal';
-import { useMonthlyStore } from '@/app/store/monthlyStore';
 import { useUserStore } from '@/app/store/userStore';
 import { YYYYMMDD } from '@/types';
 
@@ -19,14 +18,14 @@ interface IProps {
 const MonthlyRowCreator: React.FC<IProps> = ({ type, onAdd }) => {
   const [name, setName] = React.useState('');
   const [amount, setAmount] = React.useState('');
+  const [date, setDate] = React.useState('');
   const userEmail = useUserStore((state) => state.userInfo.email);
-  const date = useMonthlyStore((state) => state.date);
 
   return (
     <ButtonWithModal label="항목 추가" onOk={handleAddClick} onClosed={handleClose}>
       <ModalHeader className="flex flex-col gap-1">{`${TYPE_AND_LABEL_MAPPINGS[type]} 목록에 추가하기`}</ModalHeader>
       <ModalBody>
-        <div key="sm" className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+        <div key="sm" className="flex w-full flex-col mb-6 md:mb-0 gap-4">
           <Input
             size="sm"
             label="항목"
@@ -42,6 +41,14 @@ const MonthlyRowCreator: React.FC<IProps> = ({ type, onAdd }) => {
             value={amount.replace(/[^\d]/g, '')}
             onChange={handleAmountChange}
           />
+          <Input
+            type="date"
+            size="sm"
+            label="날짜"
+            value={date}
+            placeholder={`날짜를 입력하세요.`}
+            onChange={handleDateChange}
+          />
         </div>
       </ModalBody>
     </ButtonWithModal>
@@ -55,7 +62,7 @@ const MonthlyRowCreator: React.FC<IProps> = ({ type, onAdd }) => {
       amount: amount ? Number(amount) : 0,
       done: false,
       type,
-      date: date.format('YYYY-MM-DD') as YYYYMMDD,
+      date: date as YYYYMMDD,
       userId: userEmail,
     };
     onAdd(body);
@@ -72,9 +79,15 @@ const MonthlyRowCreator: React.FC<IProps> = ({ type, onAdd }) => {
     setAmount(value);
   }
 
+  function handleDateChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = e.target;
+    setDate(value);
+  }
+
   async function handleClose() {
     setName('');
     setAmount('');
+    setDate('');
   }
 };
 

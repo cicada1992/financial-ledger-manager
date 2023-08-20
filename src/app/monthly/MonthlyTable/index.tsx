@@ -86,28 +86,7 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
         <TableBody items={rows} emptyContent={'데이터를 추가해주세요.'}>
           {(item) => (
             <TableRow key={item.id}>
-              {(columnKey) => (
-                <TableCell
-                  onMouseDown={(e) => {
-                    const timer = setTimeout(() => {
-                      alert('삭제하시겠습니까?');
-                    }, 3000);
-                    e.currentTarget.onmouseup = () => {
-                      clearTimeout(timer);
-                    };
-                  }}
-                  onTouchStart={(e) => {
-                    const timer = setTimeout(() => {
-                      alert('삭제하시겠습니까?');
-                    }, 3000);
-                    e.currentTarget.ontouchend = () => {
-                      clearTimeout(timer);
-                    };
-                  }}
-                >
-                  {renderCell(item, columnKey)}
-                </TableCell>
-              )}
+              {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
             </TableRow>
           )}
         </TableBody>
