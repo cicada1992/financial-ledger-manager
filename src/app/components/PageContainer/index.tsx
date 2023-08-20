@@ -7,7 +7,7 @@ import { useLoadingStore } from '@/app/store/loadingStore';
 import { useUserStore } from '@/app/store/userStore';
 
 import { main } from './pageContainer.css';
-import LoginButton from '../Login';
+import LoginForm from '../../login/LoginForm';
 
 interface IProps {
   children: React.ReactNode;
@@ -28,7 +28,7 @@ const PageContainer: React.FC<IProps> = ({ children }) => {
   }, []);
 
   if (isInitializing) return <main className={main}>Initializing...</main>;
-  if (!hasUserInfo) return <LoginButton />;
+  if (!hasUserInfo) return <LoginForm />;
   return (
     <main className={main} style={processingStyle}>
       {isProcessing && (

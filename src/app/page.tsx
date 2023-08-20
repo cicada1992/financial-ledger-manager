@@ -1,8 +1,6 @@
 import React from 'react';
 
-import MonthlyPage from './containers/Monthly';
-
 const Home: React.FC = () => {
-  return <MonthlyPage />;
+  return '홈페이지입니다.';
 };
 export default Home;

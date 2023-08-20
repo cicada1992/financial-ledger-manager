@@ -9,13 +9,12 @@ export namespace DateUtils {
   export function getKoreanDateInfo() {
     const korNow = getKoreanNow();
     const thisYear = korNow.getFullYear();
-    const month = korNow.getMonth() + 1;
+    const thisMonth = korNow.getMonth() + 1;
     const day = korNow.getDate();
     const isDaySameOrBiggerThan25 = day >= 25;
-    const startMonth = isDaySameOrBiggerThan25 ? month : month - 1;
+    const startMonth = isDaySameOrBiggerThan25 ? thisMonth : thisMonth - 1;
     return {
       thisYear,
-      thisMonth: month,
       startMonth: startMonth,
       endMonth: startMonth + 1,
       day,
@@ -23,7 +22,7 @@ export namespace DateUtils {
   }
 
   export function getProgressInfo() {
-    const { thisYear, thisMonth, endMonth } = getKoreanDateInfo();
+    const { thisYear, endMonth } = getKoreanDateInfo();
     const korNow = getKoreanNow();
     const last = new Date(endMonth === 1 ? thisYear + 1 : thisYear, endMonth - 1, 25).getTime();
     const current = korNow.getTime();

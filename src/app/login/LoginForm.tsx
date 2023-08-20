@@ -6,10 +6,10 @@ import React from 'react';
 import AuthAPI from '@/app/api/AuthAPI';
 import ErrorManager from '@/app/lib/ErrorManager';
 
-import EmailField from './Nav/fields/Email';
-import PasswordField from './Nav/fields/Password';
+import EmailField from '../components/Nav/fields/Email';
+import PasswordField from '../components/Nav/fields/Password';
 
-const LoginButton: React.FC = () => {
+const LoginForm: React.FC = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -40,4 +40,4 @@ const LoginButton: React.FC = () => {
   }
 };
 
-export default LoginButton;
+export default LoginForm;

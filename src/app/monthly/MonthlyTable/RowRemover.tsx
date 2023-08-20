@@ -5,7 +5,7 @@ import React from 'react';
 
 import ButtonWithModal from '@/app/components/ButtonWithModal';
 
-import { TYPE_AND_LABEL_MAPPINGS } from '..';
+import { TYPE_AND_LABEL_MAPPINGS } from '../page';
 
 interface IProps {
   type: 'INCOME' | 'SPEND';

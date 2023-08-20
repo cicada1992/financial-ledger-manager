@@ -6,7 +6,7 @@ import React, { useCallback } from 'react';
 import { DateUtils } from '@/app/utils/dateUtils';
 
 import { progress } from './MonthlyProgress.css';
-import SectionWrapper from './shared/SectionWrapper';
+import SectionWrapper from '../shared/SectionWrapper';
 
 interface IProps {
   title: React.ReactNode;

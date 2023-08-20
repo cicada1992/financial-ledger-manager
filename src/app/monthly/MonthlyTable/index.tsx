@@ -10,9 +10,10 @@ import {
   Spacer,
   Switch,
 } from '@nextui-org/react';
-import React, { forwardRef, useCallback, useImperativeHandle } from 'react';
+import React, { useCallback } from 'react';
 
-import { ICreateMonthlyBody, IMonthly, IUpdateMonthlyBody } from '@/app/api/MonthlyAPI/types';
+import { ICreateMonthlyBody, IMonthly } from '@/app/api/MonthlyAPI/types';
+import { useMonthlyStore } from '@/app/store/monthlyStore';
 
 import MonthlyRowCreator from './RowCreator';
 import MonthlyRowRemover from './RowRemover';
@@ -20,28 +21,18 @@ import MonthlyTableTitle from './Title';
 import { MONTHLY_TABLE_COLUMNS } from '../constants';
 import SectionWrapper from '../shared/SectionWrapper';
 
-export interface IMonthlyTableRef {
-  resetSelectedKeys(): void;
-}
-
 interface IProps {
   title: React.ReactNode;
   rows: Array<IMonthly>;
   type: 'INCOME' | 'SPEND';
-  createData: (data: ICreateMonthlyBody) => void;
-  updateData: (data: IUpdateMonthlyBody) => void;
-  removeData: (keys: string[]) => void;
 }
 
 /* eslint-disable */
-const MonthlyTable = forwardRef<IMonthlyTableRef, IProps>((props, ref) => {
+const MonthlyTable: React.FC<IProps> = (props) => {
   const [selectedKeys, setSelectedKeys] = React.useState<Set<string>>(new Set());
+  const monthlyStore = useMonthlyStore();
 
-  useImperativeHandle(ref, () => ({
-    resetSelectedKeys: () => selectedKeys.clear(),
-  }));
-
-  const { title, rows, type, createData, updateData, removeData } = props;
+  const { title, rows, type } = props;
   const renderCell = useCallback((row: IMonthly, columnKey: React.Key) => {
     switch (columnKey) {
       case 'name':
@@ -118,7 +109,7 @@ const MonthlyTable = forwardRef<IMonthlyTableRef, IProps>((props, ref) => {
   }
 
   async function handleAddClick(body: ICreateMonthlyBody) {
-    createData(body);
+    monthlyStore.create(body, resetSelectedKeys);
   }
 
   function handleRowChange<TKey extends keyof IMonthly>(
@@ -128,19 +119,16 @@ const MonthlyTable = forwardRef<IMonthlyTableRef, IProps>((props, ref) => {
   ) {
     const cloned = structuredClone(row);
     cloned[key] = value;
-    updateData({
-      id: cloned.id,
-      done: cloned.done,
-      type: cloned.type,
-      name: cloned.name,
-      amount: cloned.amount,
-      userId: cloned.userId,
-    });
+    monthlyStore.update(cloned, resetSelectedKeys);
   }
 
   function handleRemoveClick() {
-    removeData(Array.from(selectedKeys));
+    monthlyStore.remove(Array.from(selectedKeys), resetSelectedKeys);
   }
-});
+
+  function resetSelectedKeys() {
+    selectedKeys.clear();
+  }
+};
 
 export default MonthlyTable;
