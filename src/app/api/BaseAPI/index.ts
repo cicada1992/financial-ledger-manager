@@ -14,7 +14,7 @@ class EdgeAPI extends WithMiddleware {
       paramsSerializer: (params) => qs.stringify(params),
       timeout: 15000,
       timeoutErrorMessage: '[타임아웃] 요청 시간이 지났습니다.',
-      baseURL: 'http://localhost:8912',
+      baseURL: 'http://43.200.179.13:8912',
       headers: { Authorization: `Bearer ${LocalStorageHelper.getJWT()}` },
     };
     super(config);
