@@ -38,7 +38,7 @@ const MonthlyMonthController: React.FC = () => {
     const { baseMonth } = DateUtils.getYearAndMonth(date, referenceDate);
     const start = `${baseMonth}월 ${referenceDate}일`;
     const end =
-      referenceDate === 1
+      Number(referenceDate) === 1
         ? `${baseMonth}월 ${dayjs()
             .set('month', baseMonth - 1)
             .endOf('month')
