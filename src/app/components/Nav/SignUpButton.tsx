@@ -3,18 +3,21 @@
 import { ModalBody, ModalHeader } from '@nextui-org/react';
 import React from 'react';
 
-import AuthAPI from '@/app/api/AuthAPI';
-import ErrorManager from '@/app/lib/ErrorManager';
+import { IUserPayload } from '@/app/api/AuthAPI/types';
+import { useUserStore } from '@/app/store/userStore';
 
 import ButtonWithModal from '../ButtonWithModal';
 import EmailField from '../fields/Email';
 import PasswordField from '../fields/Password';
+import ReferenceDateField from '../fields/ReferenceDate';
 import UsernameField from '../fields/Username';
 
 const SignUpButton: React.FC = () => {
   const [email, setEmail] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [referenceDate, setReferenceDate] = React.useState('');
+  const userStore = useUserStore();
 
   return (
     <ButtonWithModal
@@ -29,17 +32,20 @@ const SignUpButton: React.FC = () => {
           <EmailField value={email} onChange={setEmail} />
           <UsernameField value={username} onChange={setUsername} />
           <PasswordField value={password} onChange={setPassword} />
+          <ReferenceDateField value={referenceDate} onChange={setReferenceDate} />
         </div>
       </ModalBody>
     </ButtonWithModal>
   );
 
   async function handleSubmit() {
-    try {
-      await AuthAPI.signUp({ email, username, password });
-    } catch (e) {
-      ErrorManager.alert(e);
-    }
+    const body: IUserPayload = {
+      email,
+      username,
+      password,
+      referenceDate: Number(referenceDate),
+    };
+    await userStore.register(body);
   }
 
   function resetFields() {

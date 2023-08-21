@@ -16,13 +16,12 @@ import { IMonthly } from '@/app/api/MonthlyAPI/types';
 import SectionWrapper from './shared/SectionWrapper';
 
 interface IProps {
-  period: React.ReactNode;
   data: IMonthly[];
 }
 
-const MonthlySummary: React.FC<IProps> = ({ period, data }) => {
+const MonthlySummary: React.FC<IProps> = ({ data }) => {
   return (
-    <SectionWrapper title={<>Summary {period}</>}>
+    <SectionWrapper title="Summary">
       <Card style={{ width: '100%' }}>
         <CardBody>
           <Popover placement="right">
@@ -31,7 +30,7 @@ const MonthlySummary: React.FC<IProps> = ({ period, data }) => {
             </PopoverTrigger>
             <PopoverContent>
               <div className="px-1 py-2">
-                <div className="text-small font-bold">예상 잔액 {period}</div>
+                <div className="text-small font-bold">예상 잔액</div>
                 <div className="text-tiny">이번달 총수입에서 총 지출을 뺀 금액이에요.</div>
               </div>
             </PopoverContent>
@@ -43,7 +42,7 @@ const MonthlySummary: React.FC<IProps> = ({ period, data }) => {
             </PopoverTrigger>
             <PopoverContent>
               <div className="px-1 py-2">
-                <div className="text-small font-bold">지출 잔액 {period}</div>
+                <div className="text-small font-bold">지출 잔액</div>
                 <div className="text-tiny">
                   이번달 지출예정액에서 아직 처리되지 않은 것들의 합산을 의미해요.
                 </div>

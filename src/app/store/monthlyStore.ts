@@ -43,10 +43,14 @@ export const useMonthlyStore = create<IMonthlyStore>((set, get) => {
 
     // fetchers
     fetchList: async (userEmail: string, date: Dayjs) => {
+      const userStore = useUserStore.getState();
       const loadingStore = useLoadingStore.getState();
       try {
         loadingStore.startLoading(LOADING_KEY);
-        const list = await MonthlyAPI.getList(userEmail, DateUtils.getDateParam(date));
+        const list = await MonthlyAPI.getList(
+          userEmail,
+          DateUtils.getDateParam(date, userStore.userInfo.referenceDate),
+        );
         set({ list });
       } catch (e) {
         ErrorManager.alert(e);
@@ -58,10 +62,14 @@ export const useMonthlyStore = create<IMonthlyStore>((set, get) => {
     // mutators
     create: async (body, onSuccess) => {
       const { date } = get();
+      const userStore = useUserStore.getState();
       const loadingStore = useLoadingStore.getState();
       loadingStore.startLoading(LOADING_KEY);
       try {
-        const list = await MonthlyAPI.create(body, DateUtils.getDateParam(date));
+        const list = await MonthlyAPI.create(
+          body,
+          DateUtils.getDateParam(date, userStore.userInfo.referenceDate),
+        );
         set({ list });
         onSuccess();
       } catch (e) {
@@ -72,10 +80,14 @@ export const useMonthlyStore = create<IMonthlyStore>((set, get) => {
     },
     update: async (body, onSuccess) => {
       const { date } = get();
+      const userStore = useUserStore.getState();
       const loadingStore = useLoadingStore.getState();
       loadingStore.startLoading(LOADING_KEY);
       try {
-        const list = await MonthlyAPI.update(body, DateUtils.getDateParam(date));
+        const list = await MonthlyAPI.update(
+          body,
+          DateUtils.getDateParam(date, userStore.userInfo.referenceDate),
+        );
         set({ list });
         onSuccess();
       } catch (e) {
@@ -93,7 +105,7 @@ export const useMonthlyStore = create<IMonthlyStore>((set, get) => {
         await Promise.all(ids.map((id) => MonthlyAPI.remove(id)));
         const list = await MonthlyAPI.getList(
           userStore.userInfo.email,
-          DateUtils.getDateParam(date),
+          DateUtils.getDateParam(date, userStore.userInfo.referenceDate),
         );
         set({ list });
         onSuccess();

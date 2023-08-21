@@ -1,6 +1,5 @@
 'use client';
 import { Spacer } from '@nextui-org/react';
-import { Dayjs } from 'dayjs';
 import React, { useEffect } from 'react';
 
 import { useMonthlyStore } from '@/app/store/monthlyStore';
@@ -11,7 +10,6 @@ import MonthlyProgress from './MonthlyProgress';
 import MonthlySummary from './MonthlySummary';
 import MonthlyTable from './MonthlyTable';
 import PageContainer from '../components/PageContainer';
-import { DateUtils } from '../utils/dateUtils';
 
 export const TYPE_AND_LABEL_MAPPINGS: Record<'INCOME' | 'SPEND', string> = {
   INCOME: '수입',
@@ -23,7 +21,6 @@ const SPACE = 6;
 const MonthlyPage: React.FC = () => {
   const userEmail = useUserStore((state) => state.userInfo.email);
   const monthlyStore = useMonthlyStore();
-  const periodNode = getPeriodNode(monthlyStore.date);
 
   useEffect(() => {
     if (!userEmail) return;
@@ -34,39 +31,22 @@ const MonthlyPage: React.FC = () => {
     <PageContainer>
       <MonthlyMonthController />
       <Spacer y={SPACE} />
-      <MonthlyProgress title={<>진척도 {periodNode}</>} />
+      <MonthlyProgress title="진척도" />
       <Spacer y={SPACE} />
       <MonthlyTable
-        title={
-          <>
-            {TYPE_AND_LABEL_MAPPINGS['INCOME']} {periodNode}
-          </>
-        }
+        title={TYPE_AND_LABEL_MAPPINGS['INCOME']}
         rows={monthlyStore.list.filter(({ type }) => type === 'INCOME')}
         type="INCOME"
       />
       <Spacer y={SPACE} />
       <MonthlyTable
-        title={
-          <>
-            {TYPE_AND_LABEL_MAPPINGS['SPEND']} {periodNode}
-          </>
-        }
+        title={TYPE_AND_LABEL_MAPPINGS['SPEND']}
         rows={monthlyStore.list.filter(({ type }) => type === 'SPEND')}
         type="SPEND"
       />
       <Spacer y={SPACE} />
-      <MonthlySummary period={periodNode} data={monthlyStore.list} />
+      <MonthlySummary data={monthlyStore.list} />
     </PageContainer>
   );
-
-  function getPeriodNode(date: Dayjs) {
-    const { baseMonth } = DateUtils.getYearAndMonth(date);
-    return (
-      <span style={{ color: '#a1a1aa', fontWeight: 'normal', fontSize: 11 }}>
-        ({baseMonth}월 25일 ~ {baseMonth + 1}월 24일)
-      </span>
-    );
-  }
 };
 export default MonthlyPage;

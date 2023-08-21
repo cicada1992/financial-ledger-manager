@@ -9,10 +9,13 @@ export interface ILoginResponse extends IUserInfo {
 export interface IUserInfo {
   email: string;
   username: string;
+  /** 기준일 */
+  referenceDate: number;
 }
 
 export interface IUserPayload {
   email: string;
   username: string;
   password: string;
+  referenceDate: number;
 }

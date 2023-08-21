@@ -18,6 +18,12 @@ namespace AuthAPI {
     window.location.reload();
   }
 
+  export async function update(body: IUserPayload): Promise<void> {
+    const { accessToken } = await api.put<ILoginResponse>(`update`, body);
+    LocalStorageHelper.setJWT(accessToken);
+    window.location.reload();
+  }
+
   export function getUserInfo(): Promise<IUserInfo> {
     return api.get('/authenticated');
   }

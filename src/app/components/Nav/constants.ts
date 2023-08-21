@@ -1,6 +1,6 @@
 export const MENU_ITEMS: Array<{ label: string; path: string }> = [
   { label: 'Monthly', path: '/monthly' },
-  { label: 'Archives', path: '/archives' },
+  { label: 'Settings', path: '/settings' },
 ];
 
 export const EMAIL_REG_EXP =
