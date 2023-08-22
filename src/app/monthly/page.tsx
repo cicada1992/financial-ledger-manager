@@ -29,9 +29,10 @@ const MonthlyPage: React.FC = () => {
 
   return (
     <>
-      {/* Monthly 페이지 헤더 */}
-      <MonthlyMonthController />
       <PageContainer>
+        {/* Monthly 페이지 헤더 */}
+        <MonthlyMonthController />
+        <Spacer y={SPACE} />
         <MonthlyProgress title="진척도" />
         <Spacer y={SPACE} />
         <MonthlyTable

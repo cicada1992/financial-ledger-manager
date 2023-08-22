@@ -28,7 +28,7 @@ const Nav: React.FC = () => {
   const hasUserInfo = Boolean(userInfo.email && userInfo.username);
 
   return (
-    <Navbar onMenuOpenChange={(value) => setIsMenuOpen(Boolean(value))}>
+    <Navbar onMenuOpenChange={(value) => setIsMenuOpen(Boolean(value))} className="bg-white">
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
