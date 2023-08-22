@@ -20,6 +20,7 @@ import { useUserStore } from '@/app/store/userStore';
 import { MENU_ITEMS } from './constants';
 import SignUpButton from './SignUpButton';
 import UserAvartar from './UserAvartar';
+import logo from '../../assets/logo.png';
 
 const Nav: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,7 +36,7 @@ const Nav: React.FC = () => {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <Image src="/next.svg" alt="Vercel Logo" width={100} height={24} priority />
+          <Image src={logo} alt="Vercel Logo" width={100} height={20} priority />
         </NavbarBrand>
       </NavbarContent>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
