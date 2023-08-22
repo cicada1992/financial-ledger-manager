@@ -14,7 +14,7 @@ class EdgeAPI extends WithMiddleware {
       paramsSerializer: (params) => qs.stringify(params),
       timeout: 15000,
       timeoutErrorMessage: '[타임아웃] 요청 시간이 지났습니다.',
-      baseURL: 'http://localhost:3001',
+      baseURL: 'https://api.financial-ledger.com',
       headers: { Authorization: `Bearer ${LocalStorageHelper.getJWT()}` },
     };
     super(config);
