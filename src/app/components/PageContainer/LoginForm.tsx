@@ -17,7 +17,7 @@ const LoginForm: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full max-w-xs justify-center items-center mt-40">
-      <Image src={logo} alt="Vercel Logo" priority />
+      <Image src={logo} width={200} alt="financial ledger" priority />
       <Spacer y={2} />
       <EmailField value={email} onChange={setEmail} />
       <Spacer y={2} />

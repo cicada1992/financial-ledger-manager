@@ -36,7 +36,7 @@ const Nav: React.FC = () => {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <Image src={logo} alt="Vercel Logo" width={100} height={20} priority />
+          <Image src={logo} alt="Logo" width={80} height={20} priority />
         </NavbarBrand>
       </NavbarContent>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
