@@ -28,25 +28,28 @@ const MonthlyPage: React.FC = () => {
   }, [userEmail, monthlyStore.date]);
 
   return (
-    <PageContainer>
+    <>
+      {/* Monthly 페이지 헤더 */}
       <MonthlyMonthController />
-      <Spacer y={SPACE} />
-      <MonthlyProgress title="진척도" />
-      <Spacer y={SPACE} />
-      <MonthlyTable
-        title={TYPE_AND_LABEL_MAPPINGS['INCOME']}
-        rows={monthlyStore.list.filter(({ type }) => type === 'INCOME')}
-        type="INCOME"
-      />
-      <Spacer y={SPACE} />
-      <MonthlyTable
-        title={TYPE_AND_LABEL_MAPPINGS['SPEND']}
-        rows={monthlyStore.list.filter(({ type }) => type === 'SPEND')}
-        type="SPEND"
-      />
-      <Spacer y={SPACE} />
-      <MonthlySummary data={monthlyStore.list} />
-    </PageContainer>
+      <PageContainer>
+        <Spacer y={SPACE} />
+        <MonthlyProgress title="진척도" />
+        <Spacer y={SPACE} />
+        <MonthlyTable
+          title={TYPE_AND_LABEL_MAPPINGS['INCOME']}
+          rows={monthlyStore.list.filter(({ type }) => type === 'INCOME')}
+          type="INCOME"
+        />
+        <Spacer y={SPACE} />
+        <MonthlyTable
+          title={TYPE_AND_LABEL_MAPPINGS['SPEND']}
+          rows={monthlyStore.list.filter(({ type }) => type === 'SPEND')}
+          type="SPEND"
+        />
+        <Spacer y={SPACE} />
+        <MonthlySummary data={monthlyStore.list} />
+      </PageContainer>
+    </>
   );
 };
 export default MonthlyPage;

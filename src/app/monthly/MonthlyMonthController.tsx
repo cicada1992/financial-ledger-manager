@@ -16,8 +16,8 @@ const MonthlyMonthController: React.FC = () => {
 
   return (
     <div
-      className="sticky 74-top-px bg-white w-full flex justify-between items-center pb-4"
-      style={{ top: 74, zIndex: 1 }}
+      className="sticky 74-top-px bg-white w-full flex justify-between items-center pb-4 px-2"
+      style={{ top: 64, zIndex: 1 }}
     >
       <Button isIconOnly size="sm" onClick={setToPrevMonth}>
         {'<'}
