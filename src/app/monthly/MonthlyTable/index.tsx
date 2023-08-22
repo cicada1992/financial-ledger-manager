@@ -19,6 +19,7 @@ import { useUserStore } from '@/app/store/userStore';
 import { DateUtils } from '@/app/utils/dateUtils';
 
 import MonthlyRowCreator from './RowCreator';
+import MonthlyRowEditor from './RowEditor';
 import MonthlyRowRemover from './RowRemover';
 import MonthlyTableTitle from './Title';
 import SectionWrapper from '../shared/SectionWrapper';
@@ -110,11 +111,20 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
       </NextUITable>
       <Spacer y={2} />
       <div className="w-full flex justify-between">
-        <MonthlyRowRemover
-          type={type}
-          onRemove={handleRemoveClick}
-          className={selectedKeys.size <= 0 ? 'invisible' : ''}
-        />
+        <div className="flex">
+          <MonthlyRowRemover
+            type={type}
+            onRemove={handleRemoveClick}
+            className={selectedKeys.size <= 0 ? 'invisible' : ''}
+          />
+          <Spacer x={1} />
+          <MonthlyRowEditor
+            row={rows.find((item) => String(item.id) == Array.from(selectedKeys)[0])}
+            type={type}
+            onEdit={handleEditClick}
+            className={selectedKeys.size <= 0 ? 'invisible' : ''}
+          />
+        </div>
         <MonthlyRowCreator type={type} onAdd={handleAddClick} />
       </div>
     </SectionWrapper>
@@ -140,6 +150,10 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
 
   function handleRemoveClick() {
     monthlyStore.remove(Array.from(selectedKeys), resetSelectedKeys);
+  }
+
+  function handleEditClick(row: IMonthly) {
+    monthlyStore.update(row, resetSelectedKeys);
   }
 
   function resetSelectedKeys() {

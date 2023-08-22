@@ -16,8 +16,8 @@ interface IProps {
 const MonthlyRowRemover: React.FC<IProps> = ({ type, className, onRemove }) => {
   return (
     <ButtonWithModal
-      label="선택된 항목 삭제"
-      onOk={handleRemoveClick}
+      label="삭제"
+      onOk={onRemove}
       buttonProps={{ color: 'danger' }}
       className={className}
     >
@@ -25,10 +25,6 @@ const MonthlyRowRemover: React.FC<IProps> = ({ type, className, onRemove }) => {
       <ModalBody>정말로 삭제하시겠어요?</ModalBody>
     </ButtonWithModal>
   );
-
-  async function handleRemoveClick() {
-    onRemove();
-  }
 };
 
 export default MonthlyRowRemover;
