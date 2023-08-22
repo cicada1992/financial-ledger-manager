@@ -1,6 +1,6 @@
 'use client';
 
-import { Popover, PopoverContent, PopoverTrigger, Progress } from '@nextui-org/react';
+import { Progress } from '@nextui-org/react';
 import React, { useCallback } from 'react';
 
 import { useMonthlyStore } from '@/app/store/monthlyStore';
@@ -25,16 +25,12 @@ const MonthlyProgress: React.FC<IProps> = ({ title }) => {
 
   return (
     <SectionWrapper title={title}>
-      <Popover placement="bottom-start">
-        <PopoverTrigger>
-          <Progress value={ratio} className={progress} />
-        </PopoverTrigger>
-        <PopoverContent>
-          <div className="px-1 py-2">
-            <div className="text-tiny">월급날까지 {remains}일 남았어요.</div>
-          </div>
-        </PopoverContent>
-      </Popover>
+      <Progress value={ratio} className={progress} />
+      <div className="px-1 py-2">
+        <div className="text-tiny text-slate-500">
+          {remains ? `🚀 월급날까지 ${remains}일 남았어요.` : '월급날 입니다! 🌈'}
+        </div>
+      </div>
     </SectionWrapper>
   );
 };

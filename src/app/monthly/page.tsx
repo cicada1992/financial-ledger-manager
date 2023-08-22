@@ -16,7 +16,7 @@ export const TYPE_AND_LABEL_MAPPINGS: Record<'INCOME' | 'SPEND', string> = {
   SPEND: '지출',
 };
 
-const SPACE = 6;
+const SPACE = 4;
 
 const MonthlyPage: React.FC = () => {
   const userEmail = useUserStore((state) => state.userInfo.email);
@@ -32,7 +32,6 @@ const MonthlyPage: React.FC = () => {
       {/* Monthly 페이지 헤더 */}
       <MonthlyMonthController />
       <PageContainer>
-        <Spacer y={SPACE} />
         <MonthlyProgress title="진척도" />
         <Spacer y={SPACE} />
         <MonthlyTable
