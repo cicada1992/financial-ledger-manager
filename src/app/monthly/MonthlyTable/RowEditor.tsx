@@ -25,10 +25,7 @@ const MonthlyRowEditor: React.FC<IProps> = ({ row, type, className, onEdit }) =>
   const userEmail = useUserStore((state) => state.userInfo.email);
 
   useEffect(() => {
-    if (!row) return;
-    setName(row.name);
-    setAmount(String(row.amount));
-    setDate(row.date);
+    setFieldsByRow();
   }, [row]);
 
   return (
@@ -84,9 +81,14 @@ const MonthlyRowEditor: React.FC<IProps> = ({ row, type, className, onEdit }) =>
   }
 
   function handleClose() {
-    setName('');
-    setAmount('');
-    setDate('');
+    setFieldsByRow();
+  }
+
+  function setFieldsByRow() {
+    if (!row) return;
+    setName(row.name);
+    setAmount(String(row.amount));
+    setDate(row.date);
   }
 };
 
