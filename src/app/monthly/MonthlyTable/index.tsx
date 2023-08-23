@@ -9,9 +9,11 @@ import {
   TableCell,
   Spacer,
   Button,
+  SortDescriptor,
 } from '@nextui-org/react';
 import dayjs from 'dayjs';
-import React, { useCallback } from 'react';
+import { orderBy } from 'lodash-es';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { ICreateMonthlyBody, IMonthly } from '@/app/api/MonthlyAPI/types';
 import { useMonthlyStore } from '@/app/store/monthlyStore';
@@ -28,7 +30,7 @@ import SectionWrapper from '../shared/SectionWrapper';
 
 export const MONTHLY_TABLE_COLUMNS: Array<{ name: string; uid: string }> = [
   { name: '항목', uid: 'name' },
-  { name: '금액(￦)', uid: 'value' },
+  { name: '금액(￦)', uid: 'amount' },
   { name: '날짜', uid: 'date' },
 ];
 
@@ -46,8 +48,26 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
   const { baseMonth } = DateUtils.getYearAndMonth(monthlyStore.date, referenceDate);
   const noSelectedRow = selectedKeys.size <= 0;
   const selectedRow = getSelectedRow();
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+    column: 'date',
+    direction: 'ascending',
+  });
+  const [sortedRows, setSortedRows] = useState<IMonthly[]>([]);
 
-  const renderCell = useCallback((row: IMonthly, columnKey: React.Key) => {
+  useEffect(() => {
+    const sorted = getSortedRows();
+    setSortedRows(sorted);
+  }, [rows]);
+
+  useEffect(() => {
+    const { column, direction } = sortDescriptor;
+    if (!column || !direction) return;
+
+    const sorted = getSortedRows();
+    setSortedRows(sorted);
+  }, [sortDescriptor]);
+
+  const renderCell = useCallback((row: IMonthly, columnKey: keyof IMonthly) => {
     switch (columnKey) {
       case 'name':
         return (
@@ -61,7 +81,7 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
             {row.name}
           </div>
         );
-      case 'value':
+      case 'amount':
         return row.amount.toLocaleString();
       case 'date':
         const rowMonth = dayjs(row.date).get('month') + 1;
@@ -88,23 +108,30 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
         color="danger"
         disabledKeys={rows.filter((row) => row.done).map((row) => row.id)}
         onSelectionChange={(keys) => handleSelectChange(keys as Set<string>)}
+        sortDescriptor={sortDescriptor}
+        onSortChange={(value) => setSortDescriptor(value)}
       >
         <TableHeader columns={MONTHLY_TABLE_COLUMNS}>
           {(column) => {
             const width = (() => {
               if (column.uid === 'name') return '50%';
-              if (column.uid === 'price') return 80;
               if (column.uid === 'date') return 100;
             })();
             return (
-              <TableColumn key={column.uid} width={width} minWidth={width} maxWidth={width}>
+              <TableColumn
+                key={column.uid}
+                width={width}
+                minWidth={width}
+                maxWidth={width}
+                allowsSorting
+              >
                 {column.name}
               </TableColumn>
             );
           }}
         </TableHeader>
         <TableBody
-          items={rows}
+          items={sortedRows}
           emptyContent={
             <>
               <div className="pb-1">데이터를 추가해주세요.</div>
@@ -115,7 +142,9 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
-                <TableCell className="text-xs">{renderCell(item, columnKey)}</TableCell>
+                <TableCell className="text-xs">
+                  {renderCell(item, columnKey as keyof IMonthly)}
+                </TableCell>
               )}
             </TableRow>
           )}
@@ -178,6 +207,21 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
 
   function resetSelectedKeys() {
     selectedKeys.clear();
+  }
+
+  function getSortedRows() {
+    const { column, direction } = sortDescriptor;
+    const orders = direction === 'ascending' ? 'asc' : 'desc';
+    return orderBy(
+      rows,
+      (row) => {
+        const assertedColumn = column as keyof IMonthly;
+        if (assertedColumn === 'name') return row.name;
+        if (assertedColumn === 'amount') return row.amount;
+        if (assertedColumn === 'date') return Number(dayjs(row.date).format('YYYYMMDD'));
+      },
+      orders,
+    );
   }
 };
 
