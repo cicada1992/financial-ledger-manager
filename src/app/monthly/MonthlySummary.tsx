@@ -5,6 +5,7 @@ import React from 'react';
 
 import { IMonthly } from '@/app/api/MonthlyAPI/types';
 
+import { summaryChipText } from './MonthlySummary.css';
 import SectionWrapper from './shared/SectionWrapper';
 
 interface IProps {
@@ -24,9 +25,9 @@ const MonthlySummary: React.FC<IProps> = ({ data }) => {
               <div className="text-xs pb-1">수입 합계</div>
               <div>
                 <Chip color="primary" size="sm">
-                  ￦{totalIncome.toLocaleString()}
-                </Chip>{' '}
-                -
+                  <span className={summaryChipText}>{totalIncome.toLocaleString()}</span>
+                </Chip>
+                {'  '}-
               </div>
             </div>
             <Spacer />
@@ -34,16 +35,20 @@ const MonthlySummary: React.FC<IProps> = ({ data }) => {
               <div className="text-xs pb-1">지출 합계</div>
               <div>
                 <Chip color="danger" size="sm">
-                  ￦{totalSpend.toLocaleString()}
-                </Chip>{' '}
-                =
+                  <span className={summaryChipText}>{totalSpend.toLocaleString()}</span>
+                </Chip>
+                {'  '}=
               </div>
             </div>
             <Spacer />
             <div>
               <div className="text-xs pb-1">예상 잔액</div>
               <div>
-                <Chip size="sm">￦{(totalIncome - totalSpend).toLocaleString()}</Chip>
+                <Chip size="sm">
+                  <span className={summaryChipText}>
+                    {(totalIncome - totalSpend).toLocaleString()}
+                  </span>
+                </Chip>
               </div>
             </div>
           </div>
@@ -53,7 +58,7 @@ const MonthlySummary: React.FC<IProps> = ({ data }) => {
               <div className="text-xs pb-1">지출 잔액</div>
               <div>
                 <Chip size="sm">
-                  {remainedSpend ? `￦${remainedSpend.toLocaleString()}` : '없음'}
+                  <span className={summaryChipText}>{remainedSpend.toLocaleString()}</span>
                 </Chip>
               </div>
             </div>
