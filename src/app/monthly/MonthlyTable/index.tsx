@@ -8,7 +8,7 @@ import {
   TableColumn,
   TableCell,
   Spacer,
-  Switch,
+  Button,
 } from '@nextui-org/react';
 import dayjs from 'dayjs';
 import React, { useCallback } from 'react';
@@ -18,6 +18,7 @@ import { useMonthlyStore } from '@/app/store/monthlyStore';
 import { useUserStore } from '@/app/store/userStore';
 import { DateUtils } from '@/app/utils/dateUtils';
 
+import { doneCell, grandient } from './MonthlyTable.css';
 import MonthlyRowCreator from './RowCreator';
 import MonthlyRowEditor from './RowEditor';
 import MonthlyRowRemover from './RowRemover';
@@ -42,6 +43,9 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
   const referenceDate = useUserStore((state) => state.userInfo.referenceDate);
   const monthlyStore = useMonthlyStore();
   const { baseMonth } = DateUtils.getYearAndMonth(monthlyStore.date, referenceDate);
+  const noSelectedRow = selectedKeys.size <= 0;
+  const selectedRow = getSelectedRow();
+
   const renderCell = useCallback((row: IMonthly, columnKey: React.Key) => {
     switch (columnKey) {
       case 'name':
@@ -62,13 +66,12 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
         const rowMonth = dayjs(row.date).get('month') + 1;
         const isSameAsBaseMonth = rowMonth === baseMonth;
         const date = dayjs(row.date).format('D일');
-        return `${isSameAsBaseMonth ? '당월' : '익월'} ${date}`;
-      case 'done':
         return (
-          <Switch
-            isSelected={row.done}
-            onValueChange={(value) => handleRowChange('done', value, row)}
-          />
+          <div className={row.done ? doneCell : undefined}>
+            <span className={row.done ? grandient : undefined}>
+              {isSameAsBaseMonth ? '당월' : '익월'} {date}
+            </span>
+          </div>
         );
       default:
         return '-';
@@ -115,15 +118,24 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
           <MonthlyRowRemover
             type={type}
             onRemove={handleRemoveClick}
-            className={selectedKeys.size <= 0 ? 'invisible' : ''}
+            className={noSelectedRow ? 'invisible' : ''}
           />
           <Spacer x={1} />
           <MonthlyRowEditor
-            row={rows.find((item) => String(item.id) == Array.from(selectedKeys)[0])}
+            row={selectedRow}
             type={type}
             onEdit={handleEditClick}
-            className={selectedKeys.size <= 0 ? 'invisible' : ''}
+            className={noSelectedRow ? 'invisible' : ''}
           />
+          <Spacer x={1} />
+          <Button
+            size="sm"
+            color={'default'}
+            className={noSelectedRow ? 'invisible' : ''}
+            onClick={handleDoneClick}
+          >
+            {selectedRow?.done ? '완료 취소' : '완료 처리'}
+          </Button>
         </div>
         <MonthlyRowCreator type={type} onAdd={handleAddClick} />
       </div>
@@ -138,22 +150,21 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
     monthlyStore.create(body, resetSelectedKeys);
   }
 
-  function handleRowChange<TKey extends keyof IMonthly>(
-    key: TKey,
-    value: IMonthly[TKey],
-    row: IMonthly,
-  ) {
-    const cloned = structuredClone(row);
-    cloned[key] = value;
-    monthlyStore.update(cloned, resetSelectedKeys);
-  }
-
   function handleRemoveClick() {
     monthlyStore.remove(Array.from(selectedKeys), resetSelectedKeys);
   }
 
   function handleEditClick(row: IMonthly) {
     monthlyStore.update(row, resetSelectedKeys);
+  }
+
+  function handleDoneClick() {
+    if (!selectedRow) return;
+    monthlyStore.update({ ...selectedRow, done: !selectedRow.done }, resetSelectedKeys);
+  }
+
+  function getSelectedRow() {
+    return rows.find((item) => String(item.id) == Array.from(selectedKeys)[0]);
   }
 
   function resetSelectedKeys() {
