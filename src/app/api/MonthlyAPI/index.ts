@@ -21,6 +21,10 @@ namespace MonthlyAPI {
   export function remove(id: string): Promise<void> {
     return api.delete(`/${id}`);
   }
+
+  export function copy(userEmail: string, date: YYYYMM): Promise<IMonthly[]> {
+    return api.get(`/copy`, { params: { userEmail, date } });
+  }
 }
 
 export default MonthlyAPI;

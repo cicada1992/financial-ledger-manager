@@ -21,6 +21,7 @@ interface IMonthlyStore {
   create(body: ICreateMonthlyBody, onSuccess: () => void): Promise<void>;
   update(body: IUpdateMonthlyBody, onSuccess: () => void): Promise<void>;
   remove(ids: string[], onSuccess: () => void): Promise<void>;
+  copyData(userEmail: string, date: Dayjs): Promise<void>;
 }
 
 export const useMonthlyStore = create<IMonthlyStore>((set, get) => {
@@ -42,7 +43,7 @@ export const useMonthlyStore = create<IMonthlyStore>((set, get) => {
     setList: (list) => set({ list }),
 
     // fetchers
-    fetchList: async (userEmail: string, date: Dayjs) => {
+    fetchList: async (userEmail, date) => {
       const userStore = useUserStore.getState();
       const loadingStore = useLoadingStore.getState();
       try {
@@ -109,6 +110,22 @@ export const useMonthlyStore = create<IMonthlyStore>((set, get) => {
         );
         set({ list });
         onSuccess();
+      } catch (e) {
+        ErrorManager.alert(e);
+      } finally {
+        loadingStore.finishLoading(LOADING_KEY);
+      }
+    },
+    copyData: async (userEmail, date) => {
+      const userStore = useUserStore.getState();
+      const loadingStore = useLoadingStore.getState();
+      loadingStore.startLoading(LOADING_KEY);
+      try {
+        const list = await MonthlyAPI.copy(
+          userEmail,
+          DateUtils.getDateParam(date, userStore.userInfo.referenceDate),
+        );
+        set({ list });
       } catch (e) {
         ErrorManager.alert(e);
       } finally {

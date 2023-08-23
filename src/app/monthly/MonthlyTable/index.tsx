@@ -18,6 +18,7 @@ import { useMonthlyStore } from '@/app/store/monthlyStore';
 import { useUserStore } from '@/app/store/userStore';
 import { DateUtils } from '@/app/utils/dateUtils';
 
+import CopyPrevMonthDataButton from './CopyPrevMonthDataButton';
 import { doneCell, grandient } from './MonthlyTable.css';
 import MonthlyRowCreator from './RowCreator';
 import MonthlyRowEditor from './RowEditor';
@@ -102,7 +103,15 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
             );
           }}
         </TableHeader>
-        <TableBody items={rows} emptyContent={'데이터를 추가해주세요.'}>
+        <TableBody
+          items={rows}
+          emptyContent={
+            <>
+              <div className="pb-1">데이터를 추가해주세요.</div>
+              <CopyPrevMonthDataButton />
+            </>
+          }
+        >
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
