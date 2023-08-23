@@ -1,14 +1,6 @@
 'use client';
 
-import {
-  Spacer,
-  Card,
-  CardBody,
-  Popover,
-  PopoverTrigger,
-  Chip,
-  PopoverContent,
-} from '@nextui-org/react';
+import { Card, CardBody, Chip, Divider, Spacer } from '@nextui-org/react';
 import React from 'react';
 
 import { IMonthly } from '@/app/api/MonthlyAPI/types';
@@ -20,55 +12,72 @@ interface IProps {
 }
 
 const MonthlySummary: React.FC<IProps> = ({ data }) => {
+  const { INCOME: totalIncome, SPEND: totalSpend } = getTotal();
+  const { INCOME: remainedIncome, SPEND: remainedSpend } = getRemained();
+
   return (
     <SectionWrapper title="Summary">
-      <Card style={{ width: '100%' }}>
+      <Card style={{ width: '100%' }} className="text-sm">
         <CardBody>
-          <Popover placement="right">
-            <PopoverTrigger>
-              <Chip color="primary">{getExpected()}</Chip>
-            </PopoverTrigger>
-            <PopoverContent>
-              <div className="px-1 py-2">
-                <div className="text-small font-bold">예상 잔액</div>
-                <div className="text-tiny">이번달 총수입에서 총 지출을 뺀 금액이에요.</div>
+          <div className="flex justify-start">
+            <div>
+              <div className="text-xs pb-1">수입 합계</div>
+              <div>
+                <Chip color="primary" size="sm">
+                  ￦{totalIncome.toLocaleString()}
+                </Chip>{' '}
+                -
               </div>
-            </PopoverContent>
-          </Popover>
-          <Spacer y={2} />
-          <Popover placement="right">
-            <PopoverTrigger>
-              <Chip color="default">{getRemainedSpend()}</Chip>
-            </PopoverTrigger>
-            <PopoverContent>
-              <div className="px-1 py-2">
-                <div className="text-small font-bold">지출 잔액</div>
-                <div className="text-tiny">
-                  이번달 지출예정액에서 아직 처리되지 않은 것들의 합산을 의미해요.
-                </div>
+            </div>
+            <Spacer />
+            <div>
+              <div className="text-xs pb-1">지출 합계</div>
+              <div>
+                <Chip color="danger" size="sm">
+                  ￦{totalSpend.toLocaleString()}
+                </Chip>{' '}
+                =
               </div>
-            </PopoverContent>
-          </Popover>
+            </div>
+            <Spacer />
+            <div>
+              <div className="text-xs pb-1">예상 잔액</div>
+              <div>
+                <Chip size="sm">￦{(totalIncome - totalSpend).toLocaleString()}</Chip>
+              </div>
+            </div>
+          </div>
+          <Divider className="my-4" />
+          <div className="flex justify-start">
+            <div>
+              <div className="text-xs pb-1">지출 잔액</div>
+              <div>
+                <Chip size="sm">
+                  {remainedSpend ? `￦${remainedSpend.toLocaleString()}` : '없음'}
+                </Chip>
+              </div>
+            </div>
+          </div>
         </CardBody>
       </Card>
     </SectionWrapper>
   );
 
-  function getExpected(): string {
-    const totalIncome = data
-      .filter(({ type }) => type === 'INCOME')
-      .reduce((acc, cur) => acc + cur.amount, 0);
-    const totalSpend = data
-      .filter(({ type }) => type === 'SPEND')
-      .reduce((acc, cur) => acc + cur.amount, 0);
-    return `￦${(totalIncome - totalSpend).toLocaleString()}`;
+  function getTotal() {
+    return data.reduce((acc, cur) => ({ ...acc, [cur.type]: acc[cur.type] + cur.amount }), {
+      ['INCOME']: 0,
+      ['SPEND']: 0,
+    });
   }
 
-  function getRemainedSpend(): string {
-    const remained = data
-      .filter(({ type }) => type === 'SPEND')
-      .reduce((acc, cur) => (cur.done ? acc : acc + cur.amount), 0);
-    return `￦${remained.toLocaleString()}`;
+  function getRemained() {
+    return data.reduce(
+      (acc, cur) => ({ ...acc, [cur.type]: cur.done ? acc[cur.type] : acc[cur.type] + cur.amount }),
+      {
+        ['INCOME']: 0,
+        ['SPEND']: 0,
+      },
+    );
   }
 };
 
