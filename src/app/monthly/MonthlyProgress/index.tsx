@@ -28,7 +28,7 @@ const MonthlyProgress: React.FC<IProps> = ({ title }) => {
       <Progress value={ratio} className={progress} />
       <div className="px-1 py-2">
         <div className="text-tiny text-slate-500">
-          {remains ? `🚀 월급날까지 ${remains}일 남았어요.` : '월급날 입니다! 🌈'}
+          {remains ? `🚀 월급날까지 ${remains}일 남았어요.` : '🌈 고생많으셨어요 :)'}
         </div>
       </div>
     </SectionWrapper>
