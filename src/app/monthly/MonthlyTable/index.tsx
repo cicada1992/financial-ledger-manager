@@ -59,7 +59,7 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
       case 'value':
         return row.amount.toLocaleString();
       case 'date':
-        const rowMonth = dayjs(row.date).get('month');
+        const rowMonth = dayjs(row.date).get('month') + 1;
         const isSameAsBaseMonth = rowMonth === baseMonth;
         const date = dayjs(row.date).format('D일');
         return `${isSameAsBaseMonth ? '당월' : '익월'} ${date}`;
