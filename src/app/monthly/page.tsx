@@ -9,9 +9,10 @@ import MonthlyMonthController from './MonthlyMonthController';
 import MonthlyProgress from './MonthlyProgress';
 import MonthlySummary from './MonthlySummary';
 import MonthlyTable from './MonthlyTable';
+import { IMonthly } from '../api/MonthlyAPI/types';
 import PageContainer from '../components/PageContainer';
 
-export const TYPE_AND_LABEL_MAPPINGS: Record<'INCOME' | 'SPEND', string> = {
+export const TYPE_AND_LABEL_MAPPINGS: Record<IMonthly['type'], string> = {
   INCOME: '수입',
   SPEND: '지출',
 };

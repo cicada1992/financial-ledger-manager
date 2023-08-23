@@ -13,7 +13,7 @@ import { TYPE_AND_LABEL_MAPPINGS } from '../page';
 
 interface IProps {
   row?: IMonthly;
-  type: 'INCOME' | 'SPEND';
+  type: IMonthly['type'];
   className?: string;
   onEdit(row: IMonthly): void;
 }

@@ -33,7 +33,7 @@ export const MONTHLY_TABLE_COLUMNS: Array<{ name: string; uid: string }> = [
 interface IProps {
   title: React.ReactNode;
   rows: Array<IMonthly>;
-  type: 'INCOME' | 'SPEND';
+  type: IMonthly['type'];
 }
 
 /* eslint-disable */

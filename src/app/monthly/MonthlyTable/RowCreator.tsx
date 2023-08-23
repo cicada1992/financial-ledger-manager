@@ -3,7 +3,7 @@
 import { ModalBody, ModalHeader } from '@nextui-org/react';
 import React from 'react';
 
-import { ICreateMonthlyBody } from '@/app/api/MonthlyAPI/types';
+import { ICreateMonthlyBody, IMonthly } from '@/app/api/MonthlyAPI/types';
 import ButtonWithModal from '@/app/components/ButtonWithModal';
 import { useUserStore } from '@/app/store/userStore';
 import { YYYYMMDD } from '@/types';
@@ -12,7 +12,7 @@ import MonthlyRowForm from './shared/MonthlyForm';
 import { TYPE_AND_LABEL_MAPPINGS } from '../page';
 
 interface IProps {
-  type: 'INCOME' | 'SPEND';
+  type: IMonthly['type'];
   onAdd(data: ICreateMonthlyBody): void;
 }
 

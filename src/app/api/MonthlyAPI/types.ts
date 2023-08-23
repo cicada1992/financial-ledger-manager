@@ -15,7 +15,7 @@ export interface ICreateMonthlyBody {
   name: string;
   amount: number;
   done: boolean;
-  type: 'INCOME' | 'SPEND';
+  type: IMonthly['type'];
   date: YYYYMMDD;
   /** 유저 이메일 */
   userId: string;
@@ -26,7 +26,7 @@ export interface IUpdateMonthlyBody {
   name: string;
   amount: number;
   done: boolean;
-  type: 'INCOME' | 'SPEND';
+  type: IMonthly['type'];
   date: YYYYMMDD;
   /** 유저 이메일 */
   userId: string;

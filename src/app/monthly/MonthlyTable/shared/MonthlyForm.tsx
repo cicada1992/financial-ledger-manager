@@ -3,8 +3,10 @@
 import { Input } from '@nextui-org/react';
 import React from 'react';
 
+import { IMonthly } from '@/app/api/MonthlyAPI/types';
+
 interface IProps {
-  type: 'INCOME' | 'SPEND';
+  type: IMonthly['type'];
   name: string;
   amount: string;
   date: string;

@@ -3,12 +3,13 @@
 import { ModalBody, ModalHeader } from '@nextui-org/react';
 import React from 'react';
 
+import { IMonthly } from '@/app/api/MonthlyAPI/types';
 import ButtonWithModal from '@/app/components/ButtonWithModal';
 
 import { TYPE_AND_LABEL_MAPPINGS } from '../page';
 
 interface IProps {
-  type: 'INCOME' | 'SPEND';
+  type: IMonthly['type'];
   className?: string;
   onRemove(): void;
 }
