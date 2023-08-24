@@ -85,12 +85,11 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
         return row.amount.toLocaleString();
       case 'date':
         const rowMonth = dayjs(row.date).get('month') + 1;
-        const isSameAsBaseMonth = rowMonth === baseMonth;
         const date = dayjs(row.date).format('D일');
         return (
           <div className={row.done ? doneCell : undefined}>
             <span className={row.done ? grandient : undefined}>
-              {isSameAsBaseMonth ? '당월' : '익월'} {date}
+              {rowMonth}월 {date}
             </span>
           </div>
         );
@@ -214,13 +213,16 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
     const orders = direction === 'ascending' ? 'asc' : 'desc';
     return orderBy(
       rows,
-      (row) => {
-        const assertedColumn = column as keyof IMonthly;
-        if (assertedColumn === 'name') return row.name;
-        if (assertedColumn === 'amount') return row.amount;
-        if (assertedColumn === 'date') return Number(dayjs(row.date).format('YYYYMMDD'));
-      },
-      orders,
+      [
+        (row) => {
+          const assertedColumn = column as keyof IMonthly;
+          if (assertedColumn === 'name') return row.name;
+          if (assertedColumn === 'amount') return row.amount;
+          if (assertedColumn === 'date') return Number(dayjs(row.date).format('YYYYMMDD'));
+        },
+        'name',
+      ],
+      [orders, 'asc'],
     );
   }
 };
