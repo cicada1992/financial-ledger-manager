@@ -9,7 +9,7 @@ interface ILoadingStore {
   finishLoading(key: keyof ILoadingStore['pool']): void;
 }
 
-export const useLoadingStore = createZustandStore<ILoadingStore>((set) => ({
+export const useLoadingStore = createZustandStore<ILoadingStore>('useLoadingStore', (set) => ({
   pool: {
     init: true,
     normal: false,

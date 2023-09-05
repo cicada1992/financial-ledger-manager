@@ -14,7 +14,7 @@ interface IUserStore {
   update(body: Partial<IUserPayload> & { password: string }): Promise<void>;
 }
 
-export const useUserStore = createZustandStore<IUserStore>((set, get) => ({
+export const useUserStore = createZustandStore<IUserStore>('useUserStore', (set, get) => ({
   userInfo: {
     email: '',
     username: '',

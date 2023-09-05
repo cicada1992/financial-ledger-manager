@@ -24,7 +24,7 @@ interface IMonthlyStore {
   copyData(userEmail: string, date: Dayjs): Promise<void>;
 }
 
-export const useMonthlyStore = createZustandStore<IMonthlyStore>((set, get) => {
+export const useMonthlyStore = createZustandStore<IMonthlyStore>('useMonthlyStore', (set, get) => {
   return {
     date: dayjs(),
     list: [],
