@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { createZustandStore } from './zustand.lib';
 
 interface ILoadingStore {
   pool: {
@@ -9,7 +9,7 @@ interface ILoadingStore {
   finishLoading(key: keyof ILoadingStore['pool']): void;
 }
 
-export const useLoadingStore = create<ILoadingStore>((set) => ({
+export const useLoadingStore = createZustandStore<ILoadingStore>((set) => ({
   pool: {
     init: true,
     normal: false,

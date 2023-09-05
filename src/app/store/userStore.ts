@@ -1,6 +1,5 @@
-import { create } from 'zustand';
-
 import { useLoadingStore } from './loadingStore';
+import { createZustandStore } from './zustand.lib';
 import AuthAPI from '../api/AuthAPI';
 import { IUserInfo, IUserPayload } from '../api/AuthAPI/types';
 import ErrorManager from '../lib/ErrorManager';
@@ -15,7 +14,7 @@ interface IUserStore {
   update(body: Partial<IUserPayload> & { password: string }): Promise<void>;
 }
 
-export const useUserStore = create<IUserStore>((set, get) => ({
+export const useUserStore = createZustandStore<IUserStore>((set, get) => ({
   userInfo: {
     email: '',
     username: '',
