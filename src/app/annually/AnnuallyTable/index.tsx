@@ -15,18 +15,18 @@ import dayjs from 'dayjs';
 import { orderBy } from 'lodash-es';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { ICreateMonthlyBody, IMonthly } from '@/app/api/MonthlyAPI/types';
-import { useMonthlyStore } from '@/app/store/monthlyStore';
+import { IAnnually, ICreateAnnuallyBody } from '@/app/api/AnnuallyAPI/types';
+import { useAnnuallyStore } from '@/app/store/annuallyStore';
 
-import CopyPrevMonthDataButton from './CopyPrevMonthDataButton';
-import { doneCell, grandient } from './MonthlyTable.css';
-import MonthlyRowCreator from './RowCreator';
-import MonthlyRowEditor from './RowEditor';
-import MonthlyRowRemover from './RowRemover';
-import MonthlyTableTitle from './Title';
+import { doneCell, grandient } from './AnnuallyTable.css';
+import CopyPrevYearDataButton from './CopyPrevYearDataButton';
+import AnnuallyRowCreator from './RowCreator';
+import AnnuallyRowEditor from './RowEditor';
+import AnnuallyRowRemover from './RowRemover';
+import AnnuallyTableTitle from './Title';
 import SectionWrapper from '../shared/SectionWrapper';
 
-const MONTHLY_TABLE_COLUMNS: Array<{ name: string; uid: string }> = [
+const TABLE_COLUMNS: Array<{ name: string; uid: string }> = [
   { name: '항목', uid: 'name' },
   { name: '금액(￦)', uid: 'amount' },
   { name: '날짜', uid: 'date' },
@@ -34,20 +34,20 @@ const MONTHLY_TABLE_COLUMNS: Array<{ name: string; uid: string }> = [
 
 interface IProps {
   title: React.ReactNode;
-  rows: Array<IMonthly>;
-  type: IMonthly['type'];
+  rows: Array<IAnnually>;
+  type: IAnnually['type'];
 }
 
-const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
+const AnnuallyTable: React.FC<IProps> = ({ title, rows, type }) => {
   const [selectedKeys, setSelectedKeys] = React.useState<Set<string>>(new Set());
-  const monthlyStore = useMonthlyStore();
+  const annuallyStore = useAnnuallyStore();
   const noSelectedRow = selectedKeys.size <= 0;
   const selectedRow = getSelectedRow();
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: 'date',
     direction: 'ascending',
   });
-  const [sortedRows, setSortedRows] = useState<IMonthly[]>([]);
+  const [sortedRows, setSortedRows] = useState<IAnnually[]>([]);
 
   useEffect(() => {
     const sorted = getSortedRows();
@@ -62,7 +62,7 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
     setSortedRows(sorted);
   }, [sortDescriptor]);
 
-  const renderCell = useCallback((row: IMonthly, columnKey: keyof IMonthly) => {
+  const renderCell = useCallback((row: IAnnually, columnKey: keyof IAnnually) => {
     switch (columnKey) {
       case 'name':
         return (
@@ -94,7 +94,7 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
   }, []);
 
   return (
-    <SectionWrapper title={<MonthlyTableTitle title={title} />}>
+    <SectionWrapper title={<AnnuallyTableTitle title={title} />}>
       <NextUITable
         aria-label="Example static collection table"
         id="NextUITable"
@@ -105,7 +105,7 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
         sortDescriptor={sortDescriptor}
         onSortChange={(value) => setSortDescriptor(value)}
       >
-        <TableHeader columns={MONTHLY_TABLE_COLUMNS}>
+        <TableHeader columns={TABLE_COLUMNS}>
           {(column) => {
             const width = (() => {
               if (column.uid === 'name') return '50%';
@@ -129,7 +129,7 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
           emptyContent={
             <>
               <div className="pb-1">데이터를 추가해주세요.</div>
-              <CopyPrevMonthDataButton />
+              <CopyPrevYearDataButton />
             </>
           }
         >
@@ -137,7 +137,7 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
             <TableRow key={item.id}>
               {(columnKey) => (
                 <TableCell className="text-xs">
-                  {renderCell(item, columnKey as keyof IMonthly)}
+                  {renderCell(item, columnKey as keyof IAnnually)}
                 </TableCell>
               )}
             </TableRow>
@@ -147,13 +147,13 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
       <Spacer y={2} />
       <div className="w-full flex justify-between">
         <div className="flex">
-          <MonthlyRowRemover
+          <AnnuallyRowRemover
             type={type}
             onRemove={handleRemoveClick}
             className={noSelectedRow ? 'invisible' : ''}
           />
           <Spacer x={1} />
-          <MonthlyRowEditor
+          <AnnuallyRowEditor
             row={selectedRow}
             type={type}
             onEdit={handleEditClick}
@@ -169,7 +169,7 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
             {selectedRow?.done ? '완료 취소' : '완료 처리'}
           </Button>
         </div>
-        <MonthlyRowCreator type={type} onAdd={handleAddClick} />
+        <AnnuallyRowCreator type={type} onAdd={handleAddClick} />
       </div>
     </SectionWrapper>
   );
@@ -178,21 +178,21 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
     setSelectedKeys(keys);
   }
 
-  async function handleAddClick(body: ICreateMonthlyBody) {
-    monthlyStore.create(body, resetSelectedKeys);
+  async function handleAddClick(body: ICreateAnnuallyBody) {
+    annuallyStore.create(body, resetSelectedKeys);
   }
 
   function handleRemoveClick() {
-    monthlyStore.remove(Array.from(selectedKeys), resetSelectedKeys);
+    annuallyStore.remove(Array.from(selectedKeys), resetSelectedKeys);
   }
 
-  function handleEditClick(row: IMonthly) {
-    monthlyStore.update(row, resetSelectedKeys);
+  function handleEditClick(row: IAnnually) {
+    annuallyStore.update(row, resetSelectedKeys);
   }
 
   function handleDoneClick() {
     if (!selectedRow) return;
-    monthlyStore.update({ ...selectedRow, done: !selectedRow.done }, resetSelectedKeys);
+    annuallyStore.update({ ...selectedRow, done: !selectedRow.done }, resetSelectedKeys);
   }
 
   function getSelectedRow() {
@@ -210,7 +210,7 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
       rows,
       [
         (row) => {
-          const assertedColumn = column as keyof IMonthly;
+          const assertedColumn = column as keyof IAnnually;
           if (assertedColumn === 'name') return row.name;
           if (assertedColumn === 'amount') return row.amount;
           if (assertedColumn === 'date') return Number(dayjs(row.date).format('YYYYMMDD'));
@@ -222,4 +222,4 @@ const MonthlyTable: React.FC<IProps> = ({ title, rows, type }) => {
   }
 };
 
-export default MonthlyTable;
+export default AnnuallyTable;

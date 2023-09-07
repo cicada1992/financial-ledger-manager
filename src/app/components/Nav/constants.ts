@@ -1,5 +1,6 @@
 export const MENU_ITEMS: Array<{ label: string; path: string }> = [
   { label: 'Monthly Flow', path: '/monthly' },
+  { label: 'Annually Flow', path: '/annually' },
   { label: 'Settings', path: '/settings' },
 ];
 
